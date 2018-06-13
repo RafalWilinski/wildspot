@@ -1,16 +1,12 @@
 import React from "react";
-import ReactMapboxGl, { Feature, Layer } from "react-mapbox-gl";
+import { Feature, Layer } from "react-mapbox-gl";
 
 import firebase from "./firebase";
 import Cover from "./components/Cover";
 import Button from "./components/Button";
 import AddButton from "./components/Button/Add";
 import PlaceDetailsPopup from "./components/PlaceDetailsPopup";
-
-const Map = ReactMapboxGl({
-  accessToken:
-    "pk.eyJ1IjoicndpbGluc2tpIiwiYSI6ImNqNnl3bG45ejI5ZXcyd280MmxrMnFzN2EifQ.7fa6j1RX3u1WvgEw2k9TZA",
-});
+import Map from "./mapbox";
 
 const containerStyle = {
   height: "100vh",
@@ -47,7 +43,6 @@ class App extends React.Component {
   }
 
   componentWillUnmount() {
-    // Un-register the listener on '/someData'.
     this.firebaseRef.off("value", this.firebaseCallback);
   }
 
@@ -77,6 +72,13 @@ class App extends React.Component {
         currentCenter: [e.transform._center.lng, e.transform._center.lat],
       });
     }
+  };
+
+  onCancelAdding = () => {
+    this.setState({
+      isAdding: false,
+      isShowingAddCover: false,
+    });
   };
 
   renderCampsites = () => (
@@ -135,7 +137,7 @@ class App extends React.Component {
           extraBottomSpace="40px"
           text="Confirm Location"
         />
-        <Button confirm inactive text="Cancel" />
+        <Button confirm inactive text="Cancel" onClick={this.onCancelAdding} />
       </div>
     ) : (
       <AddButton onClick={this.onAddingPlace} />
