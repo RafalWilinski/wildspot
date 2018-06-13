@@ -5,13 +5,13 @@ import firebase from "../../firebase";
 import Form from "./index";
 
 const AddPlaceForm = withFormik({
+  enableReinitialize: true,
   mapPropsToValues: props => {
     return {
       name: "",
       images: [],
       description: "",
       features: {},
-      isOpen: props.isOpen,
       coordinates: props.coordinates,
     };
   },
@@ -29,6 +29,8 @@ const AddPlaceForm = withFormik({
       .ref()
       .child("spots")
       .push().key;
+
+    console.log(values);
 
     const newSpot = spotFactory(newSpotKey, {
       coordinates: props.coordinates,

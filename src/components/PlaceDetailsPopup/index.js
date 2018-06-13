@@ -11,9 +11,9 @@ const StyledPopup = styled.div`
 `;
 
 const PlaceDetailsPopup = ({ selectedPlace }) => (
-  <Popup key={selectedPlace.id} coordinates={selectedPlace.coordinates}>
+  <Popup key={selectedPlace.id} coordinates={selectedPlace.entity.coordinates}>
     <StyledPopup>
-      <div>{selectedPlace.id}</div>
+      <div>{selectedPlace.entity.name}</div>
     </StyledPopup>
   </Popup>
 );

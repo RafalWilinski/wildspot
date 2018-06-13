@@ -98,11 +98,9 @@ class AddPlaceForm extends Component {
       values,
       handleChange,
       handleSubmit,
-      onClose,
+      onCancelForm,
       classes,
     } = this.props;
-
-    console.log(this.props);
 
     return (
       <Dialog
@@ -356,7 +354,7 @@ class AddPlaceForm extends Component {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose} color="primary">
+          <Button onClick={onCancelForm} color="primary">
             Cancel
           </Button>
           <Button onClick={handleSubmit} color="primary">

@@ -17,17 +17,8 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      places: [
-        {
-          id: 1,
-          coordinates: [-0.481747846041145, 51.3233379650232],
-        },
-        {
-          id: 2,
-          coordinates: [-0.13235092163085938, 51.518250335096376],
-        },
-      ],
-      selectedPlace: {},
+      places: [],
+      selectedPlace: { entity: {} },
       isAdding: false,
       isShowingAddCover: false,
       isShowingAddForm: false,
@@ -36,10 +27,13 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.firebaseRef = firebase.database().ref("/");
+    this.firebaseRef = firebase.database().ref("/spots");
     this.firebaseCallback = this.firebaseRef.on("value", snap => {
-      console.log(snap);
-      this.setState({ someData: snap.val() });
+      const json = snap.val();
+
+      Object.keys(json).map(key => {
+        return this.setState({ places: [...this.state.places, json[key]] });
+      });
     });
   }
 
@@ -84,6 +78,7 @@ class App extends React.Component {
     this.setState({
       isAdding: false,
       isShowingAddCover: false,
+      isShowingAddForm: false,
     });
   };
 
@@ -96,7 +91,7 @@ class App extends React.Component {
         <Feature
           key={place.id}
           onClick={() => this.onMarkClick(place)}
-          coordinates={place.coordinates}
+          coordinates={place.entity.coordinates}
         />
       ))}
     </Layer>
@@ -106,7 +101,7 @@ class App extends React.Component {
     const { selectedPlace } = this.state;
 
     return (
-      selectedPlace.coordinates && (
+      selectedPlace.entity.coordinates && (
         <PlaceDetailsPopup selectedPlace={selectedPlace} />
       )
     );
@@ -135,14 +130,14 @@ class App extends React.Component {
     );
 
   render() {
-    const { selectedPlace, isShowingAddForm } = this.state;
+    const { selectedPlace, isShowingAddForm, currentCenter } = this.state;
 
     return (
       <Map
         style="mapbox://styles/mapbox/outdoors-v9"
         containerStyle={containerStyle}
         onMoveEnd={this.onMoveEnd}
-        center={selectedPlace.coordinates}
+        center={selectedPlace.entity.coordinates}
       >
         {this.renderCampsites()}
         {this.renderPlaceDetails()}
@@ -157,7 +152,8 @@ class App extends React.Component {
         />
         <AddPlaceForm
           isOpen={isShowingAddForm}
-          coordinates={this.state.currentCenter}
+          coordinates={currentCenter}
+          onCancelForm={this.onCancelAdding}
         />
       </Map>
     );
