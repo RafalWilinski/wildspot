@@ -1,10 +1,14 @@
 import React from "react";
 import { Feature, Layer } from "react-mapbox-gl";
+import classNames from "classnames";
 
 import firebase from "./firebase";
 import Cover from "./components/Cover";
-import Button from "./components/Button";
-import AddButton from "./components/Button/Add";
+import BottomMenuContainer from "./components/BottomMenuContainer";
+import Button from "@material-ui/core/Button";
+import AddIcon from "@material-ui/icons/Add";
+import Save from "@material-ui/icons/Save";
+import { withStyles } from "@material-ui/core/styles";
 import PlaceDetailsPopup from "./components/PlaceDetailsPopup";
 import Map from "./mapbox";
 
@@ -12,6 +16,21 @@ const containerStyle = {
   height: "100vh",
   width: "100vw",
 };
+
+const styles = theme => ({
+  button: {
+    margin: theme.spacing.unit,
+  },
+  input: {
+    display: "none",
+  },
+  leftIcon: {
+    marginRight: theme.spacing.unit,
+  },
+  iconSmall: {
+    fontSize: 20,
+  },
+});
 
 class App extends React.Component {
   constructor(props) {
@@ -67,11 +86,9 @@ class App extends React.Component {
   };
 
   onMoveEnd = e => {
-    if (!this.state.isAdding) {
-      this.setState({
-        currentCenter: [e.transform._center.lng, e.transform._center.lat],
-      });
-    }
+    this.setState({
+      currentCenter: [e.transform._center.lng, e.transform._center.lat],
+    });
   };
 
   onCancelAdding = () => {
@@ -124,23 +141,42 @@ class App extends React.Component {
           "circle-opacity": 0.8,
         }}
       >
-        <Feature coordinates={this.state.currentCenter} draggable />
+        <Feature coordinates={this.state.currentCenter} />
       </Layer>
     );
 
   renderAddButton = () =>
     this.state.isAdding ? (
-      <div>
+      <BottomMenuContainer flexFlow="column">
         <Button
-          confirm
-          primary
-          extraBottomSpace="40px"
-          text="Confirm Location"
-        />
-        <Button confirm inactive text="Cancel" onClick={this.onCancelAdding} />
-      </div>
+          color="primary"
+          variant="contained"
+          className={this.props.classes.button}
+          size="large"
+        >
+          <Save
+            className={classNames(
+              this.props.classes.leftIcon,
+              this.props.classes.iconSmall,
+            )}
+          />
+          Add Location
+        </Button>
+        <Button
+          variant="contained"
+          onClick={this.onCancelAdding}
+          className={this.props.classes.button}
+          size="large"
+        >
+          Cancel
+        </Button>
+      </BottomMenuContainer>
     ) : (
-      <AddButton onClick={this.onAddingPlace} />
+      <BottomMenuContainer flexFlow="row-reverse">
+        <Button onClick={this.onAddingPlace} variant="fab" color="primary">
+          <AddIcon />
+        </Button>
+      </BottomMenuContainer>
     );
 
   render() {
@@ -163,4 +199,4 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default withStyles(styles)(App);
