@@ -1,9 +1,9 @@
 import firebase from "firebase";
 
 firebase.initializeApp({
-  apiKey: "AIzaSyAhoPnB_BMKGGUip1fOv0HaVw-F8QRX18s",
-  storageBucket: "gs://wildspots-d2aad.appspot.com",
-  databaseURL: "https://wildspots-d2aad.firebaseio.com/",
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL,
 });
 
 firebase
