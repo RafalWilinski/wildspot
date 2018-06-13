@@ -11,6 +11,7 @@ import Select from "@material-ui/core/Select";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
+import GridList from "@material-ui/core/GridList";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
@@ -32,6 +33,9 @@ import BeachAccess from "@material-ui/icons/BeachAccess";
 import Group from "@material-ui/icons/Group";
 import NotificationsActive from "@material-ui/icons/NotificationsActive";
 import NotificationsOff from "@material-ui/icons/NotificationsOff";
+import Home from "@material-ui/icons/Home";
+import Pets from "@material-ui/icons/Pets";
+import Wc from "@material-ui/icons/Wc";
 
 const styles = theme => ({
   formControl: {
@@ -198,11 +202,48 @@ class AddPlaceForm extends Component {
             }
             label="Loud / Quiet"
           />
+          <FormControlLabel
+            control={
+              <Checkbox
+                icon={<Home />}
+                checkedIcon={<Home />}
+                value="checkedH"
+              />
+            }
+            label="Camping Allowed"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                icon={<Pets />}
+                checkedIcon={<Pets />}
+                value="checkedH"
+              />
+            }
+            label="Animals Nearby"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox icon={<Wc />} checkedIcon={<Wc />} value="checkedH" />
+            }
+            label="WC Nearby"
+          />
           <Dropzone onDrop={this.onAttachFiles}>
             <p>
               Try dropping some files here, or click to select files to upload.
             </p>
           </Dropzone>
+          <GridList
+            cellHeight={160}
+            className={this.props.classes.gridList}
+            cols={3}
+          >
+            {/* {tileData.map(tile => (
+              <GridListTile key={tile.img} cols={tile.cols || 1}>
+                <img src={tile.img} alt={tile.title} />
+              </GridListTile>
+            ))} */}
+          </GridList>
           <TextField
             id="multiline-static"
             label="Extra Info/Remarks"
