@@ -25,8 +25,9 @@ const AddPlaceMenu = props =>
       <Button
         color="primary"
         variant="contained"
-        className={this.props.classes.button}
+        className={props.classes.button}
         size="large"
+        onClick={props.onConfirmLocation}
       >
         <Save
           className={classNames(
@@ -55,6 +56,7 @@ const AddPlaceMenu = props =>
 
 AddPlaceMenu.propTypes = {
   onAddingPlace: PropTypes.func.isRequired,
+  onConfirmLocation: PropTypes.func.isRequired,
   onCancelAdding: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
   isAdding: PropTypes.bool.isRequired,

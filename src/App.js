@@ -3,6 +3,7 @@ import { Feature, Layer } from "react-mapbox-gl";
 
 import firebase from "./firebase";
 import Map from "./mapbox";
+import AddPlaceForm from "./components/AddPlaceForm/container";
 import AddPlaceMenu from "./components/AddPlaceMenu";
 import Cover from "./components/Cover";
 import PlaceDetailsPopup from "./components/PlaceDetailsPopup";
@@ -29,6 +30,7 @@ class App extends React.Component {
       selectedPlace: {},
       isAdding: false,
       isShowingAddCover: false,
+      isShowingAddForm: false,
       currentCenter: [-0.481747846041145, 51.3233379650232],
     };
   }
@@ -68,6 +70,13 @@ class App extends React.Component {
   onMoveEnd = e => {
     this.setState({
       currentCenter: [e.transform._center.lng, e.transform._center.lat],
+    });
+  };
+
+  onConfirmLocation = () => {
+    this.setState({
+      isShowingAddForm: true,
+      isAdding: false,
     });
   };
 
@@ -126,7 +135,7 @@ class App extends React.Component {
     );
 
   render() {
-    const { selectedPlace } = this.state;
+    const { selectedPlace, isShowingAddForm } = this.state;
 
     return (
       <Map
@@ -142,9 +151,11 @@ class App extends React.Component {
         <AddPlaceMenu
           isAdding={this.state.isAdding}
           classes={this.props.classes}
+          onConfirmLocation={this.onConfirmLocation}
           onAddingPlace={this.onAddingPlace}
           onCancelAdding={this.onCancelAdding}
         />
+        <AddPlaceForm isOpen={isShowingAddForm} />
       </Map>
     );
   }
