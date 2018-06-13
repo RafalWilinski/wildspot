@@ -1,36 +1,16 @@
 import React from "react";
 import { Feature, Layer } from "react-mapbox-gl";
-import classNames from "classnames";
 
 import firebase from "./firebase";
-import Cover from "./components/Cover";
-import BottomMenuContainer from "./components/BottomMenuContainer";
-import Button from "@material-ui/core/Button";
-import AddIcon from "@material-ui/icons/Add";
-import Save from "@material-ui/icons/Save";
-import { withStyles } from "@material-ui/core/styles";
-import PlaceDetailsPopup from "./components/PlaceDetailsPopup";
 import Map from "./mapbox";
+import AddPlaceMenu from "./components/AddPlaceMenu";
+import Cover from "./components/Cover";
+import PlaceDetailsPopup from "./components/PlaceDetailsPopup";
 
 const containerStyle = {
   height: "100vh",
   width: "100vw",
 };
-
-const styles = theme => ({
-  button: {
-    margin: theme.spacing.unit,
-  },
-  input: {
-    display: "none",
-  },
-  leftIcon: {
-    marginRight: theme.spacing.unit,
-  },
-  iconSmall: {
-    fontSize: 20,
-  },
-});
 
 class App extends React.Component {
   constructor(props) {
@@ -145,40 +125,6 @@ class App extends React.Component {
       </Layer>
     );
 
-  renderAddButton = () =>
-    this.state.isAdding ? (
-      <BottomMenuContainer flexFlow="column">
-        <Button
-          color="primary"
-          variant="contained"
-          className={this.props.classes.button}
-          size="large"
-        >
-          <Save
-            className={classNames(
-              this.props.classes.leftIcon,
-              this.props.classes.iconSmall,
-            )}
-          />
-          Add Location
-        </Button>
-        <Button
-          variant="contained"
-          onClick={this.onCancelAdding}
-          className={this.props.classes.button}
-          size="large"
-        >
-          Cancel
-        </Button>
-      </BottomMenuContainer>
-    ) : (
-      <BottomMenuContainer flexFlow="row-reverse">
-        <Button onClick={this.onAddingPlace} variant="fab" color="primary">
-          <AddIcon />
-        </Button>
-      </BottomMenuContainer>
-    );
-
   render() {
     const { selectedPlace } = this.state;
 
@@ -193,10 +139,15 @@ class App extends React.Component {
         {this.renderPlaceDetails()}
         {this.renderCover()}
         {this.renderAddFeature()}
-        {this.renderAddButton()}
+        <AddPlaceMenu
+          isAdding={this.state.isAdding}
+          classes={this.props.classes}
+          onAddingPlace={this.onAddingPlace}
+          onCancelAdding={this.onCancelAdding}
+        />
       </Map>
     );
   }
 }
 
-export default withStyles(styles)(App);
+export default App;
