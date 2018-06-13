@@ -11,6 +11,9 @@ import Select from "@material-ui/core/Select";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
+import Chip from "@material-ui/core/Chip";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import GridListTile from "@material-ui/core/GridListTile";
 import GridList from "@material-ui/core/GridList";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -37,6 +40,8 @@ import Home from "@material-ui/icons/Home";
 import Pets from "@material-ui/icons/Pets";
 import Wc from "@material-ui/icons/Wc";
 
+import firebase from "../../firebase";
+
 const styles = theme => ({
   formControl: {
     margin: theme.spacing.unit,
@@ -46,13 +51,58 @@ const styles = theme => ({
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
   },
+  chip: {
+    margin: theme.spacing.unit,
+  },
+  progress: {
+    margin: theme.spacing.unit * 2,
+  },
 });
 
 class AddPlaceForm extends Component {
-  onAttachFiles = files => {};
+  state = {
+    isUploading: false,
+  };
+
+  constructor(props) {
+    super(props);
+    this.storage = firebase.storage().ref();
+  }
+
+  onAttachFiles = files => {
+    this.setState({
+      isUploading: true,
+    });
+
+    files.forEach(file => {
+      this.storage
+        .child(`images/${+new Date()}.jpg`)
+        .put(file)
+        .then(snapshot => snapshot.ref.getDownloadURL())
+        .then(img => {
+          this.setState({
+            isUploading: false,
+          });
+
+          this.props.setFieldValue("images", [
+            ...this.props.values.images,
+            img,
+          ]);
+        });
+    });
+  };
 
   render() {
-    const { isOpen, values, handleChange } = this.props;
+    const {
+      isOpen,
+      values,
+      handleChange,
+      handleSubmit,
+      onClose,
+      classes,
+    } = this.props;
+
+    console.log(this.props);
 
     return (
       <Dialog
@@ -72,14 +122,16 @@ class AddPlaceForm extends Component {
             id="name"
             label="Spot Name"
             type="text"
+            onChange={handleChange}
+            name="name"
             fullWidth
           />
           <FormControl className={this.props.classes.formControl} fullWidth>
             <InputLabel htmlFor="age-helper">Groundwork</InputLabel>
             <Select
-              value={values.groundWork}
+              value={values.groundwork}
               onChange={handleChange}
-              input={<Input name="groundWork" />}
+              input={<Input name="groundwork" />}
             >
               <MenuItem value="sand">Sand</MenuItem>
               <MenuItem value="soil">Soil</MenuItem>
@@ -94,6 +146,8 @@ class AddPlaceForm extends Component {
           <FormControlLabel
             control={
               <Checkbox
+                id="features.wifi"
+                onChange={handleChange}
                 icon={<SignalWifiOff />}
                 checkedIcon={<SignalWifi3Bar />}
                 value="checkedH"
@@ -104,6 +158,8 @@ class AddPlaceForm extends Component {
           <FormControlLabel
             control={
               <Checkbox
+                id="features.ac"
+                onChange={handleChange}
                 icon={<BatteryAlert />}
                 checkedIcon={<BatteryCharging90 />}
                 value="checkedH"
@@ -114,6 +170,8 @@ class AddPlaceForm extends Component {
           <FormControlLabel
             control={
               <Checkbox
+                id="features.grocery"
+                onChange={handleChange}
                 icon={<LocalGroceryStore />}
                 checkedIcon={<LocalGroceryStore />}
                 value="checkedH"
@@ -124,6 +182,8 @@ class AddPlaceForm extends Component {
           <FormControlLabel
             control={
               <Checkbox
+                id="features.water"
+                onChange={handleChange}
                 icon={<LocalDrink />}
                 checkedIcon={<LocalDrink />}
                 value="checkedH"
@@ -134,6 +194,8 @@ class AddPlaceForm extends Component {
           <FormControlLabel
             control={
               <Checkbox
+                id="features.cellular"
+                onChange={handleChange}
                 icon={<SignalCellularOff />}
                 checkedIcon={<SignalCellular4Bar />}
                 value="checkedH"
@@ -144,6 +206,8 @@ class AddPlaceForm extends Component {
           <FormControlLabel
             control={
               <Checkbox
+                id="features.car"
+                onChange={handleChange}
                 icon={<DirectionsCar />}
                 checkedIcon={<DirectionsCar />}
                 value="checkedH"
@@ -154,6 +218,8 @@ class AddPlaceForm extends Component {
           <FormControlLabel
             control={
               <Checkbox
+                id="features.food"
+                onChange={handleChange}
                 icon={<LocalDining />}
                 checkedIcon={<LocalDining />}
                 value="checkedH"
@@ -164,6 +230,8 @@ class AddPlaceForm extends Component {
           <FormControlLabel
             control={
               <Checkbox
+                id="features.gasStation"
+                onChange={handleChange}
                 icon={<LocalGasStation />}
                 checkedIcon={<LocalGasStation />}
                 value="checkedH"
@@ -174,6 +242,8 @@ class AddPlaceForm extends Component {
           <FormControlLabel
             control={
               <Checkbox
+                id="features.beach"
+                onChange={handleChange}
                 icon={<BeachAccess />}
                 checkedIcon={<BeachAccess />}
                 value="checkedH"
@@ -184,6 +254,8 @@ class AddPlaceForm extends Component {
           <FormControlLabel
             control={
               <Checkbox
+                id="features.notCrowded"
+                onChange={handleChange}
                 icon={<Group />}
                 checkedIcon={<Group />}
                 value="checkedH"
@@ -195,6 +267,8 @@ class AddPlaceForm extends Component {
           <FormControlLabel
             control={
               <Checkbox
+                id="features.quiet"
+                onChange={handleChange}
                 icon={<NotificationsActive />}
                 checkedIcon={<NotificationsOff />}
                 value="checkedH"
@@ -205,7 +279,9 @@ class AddPlaceForm extends Component {
           <FormControlLabel
             control={
               <Checkbox
+                onChange={handleChange}
                 icon={<Home />}
+                id="features.campingAllowed"
                 checkedIcon={<Home />}
                 value="checkedH"
               />
@@ -215,7 +291,9 @@ class AddPlaceForm extends Component {
           <FormControlLabel
             control={
               <Checkbox
+                onChange={handleChange}
                 icon={<Pets />}
+                id="features.pets"
                 checkedIcon={<Pets />}
                 value="checkedH"
               />
@@ -224,42 +302,64 @@ class AddPlaceForm extends Component {
           />
           <FormControlLabel
             control={
-              <Checkbox icon={<Wc />} checkedIcon={<Wc />} value="checkedH" />
+              <Checkbox
+                onChange={handleChange}
+                id="features.wc"
+                icon={<Wc />}
+                checkedIcon={<Wc />}
+                value="checkedH"
+              />
             }
             label="WC Nearby"
           />
-          <Dropzone onDrop={this.onAttachFiles}>
-            <p>
-              Try dropping some files here, or click to select files to upload.
-            </p>
-          </Dropzone>
-          <GridList
-            cellHeight={160}
-            className={this.props.classes.gridList}
-            cols={3}
-          >
-            {/* {tileData.map(tile => (
-              <GridListTile key={tile.img} cols={tile.cols || 1}>
-                <img src={tile.img} alt={tile.title} />
+          {!this.state.isUploading && (
+            <Dropzone
+              onDrop={this.onAttachFiles}
+              style={{
+                height: "100px",
+                borderWidth: "1px",
+                borderColor: "rgb(200, 202, 202)",
+                backgroundColor: "#EEEEEE",
+                borderStyle: "solid",
+                borderRadius: "5px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Chip
+                label="Try dropping some files here, or click to select files to upload."
+                className={classes.chip}
+              />
+            </Dropzone>
+          )}
+          {this.state.isUploading && (
+            <CircularProgress className={classes.progress} />
+          )}
+          <GridList cellHeight={160} className={classes.gridList} cols={3}>
+            {values.images.map(img => (
+              <GridListTile key={img} cols={1}>
+                <img src={img} />
               </GridListTile>
-            ))} */}
+            ))}
           </GridList>
           <TextField
-            id="multiline-static"
+            id="description"
             label="Extra Info/Remarks"
             multiline
             rows="3"
             defaultValue=""
-            className={this.props.classes.textField}
+            onChange={handleChange}
+            className={classes.textField}
             margin="normal"
             fullWidth
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.handleClose} color="primary">
+          <Button onClick={onClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={this.handleClose} color="primary">
+          <Button onClick={handleSubmit} color="primary">
             Add Place
           </Button>
         </DialogActions>
