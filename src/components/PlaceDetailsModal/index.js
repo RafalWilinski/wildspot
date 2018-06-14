@@ -56,8 +56,9 @@ class PlaceDetailsModal extends Component {
           <DialogContentText>
             {selectedPlace.entity.description}
           </DialogContentText>
-          <div>{selectedPlace.entity.name}</div>
-          <div>{selectedPlace.entity.groundwork}</div>
+          {selectedPlace.entity.groundwork && (
+            <div>Groundwork: {selectedPlace.entity.groundwork}</div>
+          )}
           <FormControlLabel
             control={
               <Checkbox
