@@ -33,8 +33,6 @@ const AddPlaceForm = withFormik({
       .child("spots")
       .push().key;
 
-    console.log(props);
-
     const newSpot = spotFactory(newSpotKey, {
       coordinates: props.coordinates,
       lat: props.coordinates[0],
