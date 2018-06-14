@@ -153,7 +153,7 @@ class App extends React.Component {
         <AddPlaceForm
           isOpen={isShowingAddForm}
           coordinates={currentCenter}
-          onCancelForm={this.onCancelAdding}
+          onCloseForm={this.onCancelAdding}
         />
       </Map>
     );

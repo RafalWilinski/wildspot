@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Dropzone from "react-dropzone";
+import styled from "styled-components";
 
 import { withStyles } from "@material-ui/core/styles";
 import Input from "@material-ui/core/Input";
@@ -12,6 +13,7 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
 import Chip from "@material-ui/core/Chip";
+import IconButton from "@material-ui/core/IconButton";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import GridListTile from "@material-ui/core/GridListTile";
 import GridList from "@material-ui/core/GridList";
@@ -34,6 +36,7 @@ import LocalDining from "@material-ui/icons/LocalDining";
 import LocalGasStation from "@material-ui/icons/LocalGasStation";
 import BeachAccess from "@material-ui/icons/BeachAccess";
 import Group from "@material-ui/icons/Group";
+import DeleteIcon from "@material-ui/icons/Delete";
 import NotificationsActive from "@material-ui/icons/NotificationsActive";
 import NotificationsOff from "@material-ui/icons/NotificationsOff";
 import Home from "@material-ui/icons/Home";
@@ -55,9 +58,16 @@ const styles = theme => ({
     margin: theme.spacing.unit,
   },
   progress: {
+    display: "block",
     margin: theme.spacing.unit * 2,
   },
 });
+
+const StyledIconButton = styled(IconButton)`
+  position: absolute !important;
+  top: 0;
+  z-index: 1000;
+`;
 
 class AddPlaceForm extends Component {
   state = {
@@ -92,13 +102,20 @@ class AddPlaceForm extends Component {
     });
   };
 
+  onImageRemove = img => {
+    this.props.setFieldValue("images", [
+      ...this.props.values.images.filter(i => i !== img),
+    ]);
+  };
+
   render() {
     const {
       isOpen,
       values,
       handleChange,
       handleSubmit,
-      onCancelForm,
+      onCloseForm,
+      isSubmitting,
       classes,
     } = this.props;
 
@@ -335,11 +352,21 @@ class AddPlaceForm extends Component {
             <CircularProgress className={classes.progress} />
           )}
           <GridList cellHeight={160} className={classes.gridList} cols={3}>
-            {values.images.map(img => (
-              <GridListTile key={img} cols={1}>
-                <img src={img} />
-              </GridListTile>
-            ))}
+            {values.images.filter(Boolean).map(
+              img =>
+                img && (
+                  <GridListTile key={img} cols={1}>
+                    <StyledIconButton
+                      className={classes.button}
+                      aria-label="Delete"
+                      onClick={() => this.onImageRemove(img)}
+                    >
+                      <DeleteIcon />
+                    </StyledIconButton>
+                    <img src={img} />
+                  </GridListTile>
+                ),
+            )}
           </GridList>
           <TextField
             id="description"
@@ -354,10 +381,14 @@ class AddPlaceForm extends Component {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={onCancelForm} color="primary">
+          <Button onClick={onCloseForm} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleSubmit} color="primary">
+          <Button
+            onClick={handleSubmit}
+            color="primary"
+            disabled={isSubmitting}
+          >
             Add Place
           </Button>
         </DialogActions>

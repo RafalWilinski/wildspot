@@ -7,6 +7,7 @@ import Form from "./index";
 const AddPlaceForm = withFormik({
   enableReinitialize: true,
   mapPropsToValues: props => {
+    console.log(props);
     return {
       name: "",
       images: [],
@@ -23,14 +24,16 @@ const AddPlaceForm = withFormik({
 
     return errors;
   },
-  handleSubmit: (values, { props }) => {
+  handleSubmit: (values, { props, setSubmitting, setError }) => {
+    setSubmitting(true);
+
     const newSpotKey = firebase
       .database()
       .ref()
       .child("spots")
       .push().key;
 
-    console.log(values);
+    console.log(props);
 
     const newSpot = spotFactory(newSpotKey, {
       coordinates: props.coordinates,
@@ -46,7 +49,15 @@ const AddPlaceForm = withFormik({
     return firebase
       .database()
       .ref()
-      .update(updates);
+      .update(updates)
+      .then(() => {
+        setSubmitting(false);
+        props.onCloseForm();
+      })
+      .catch(error => {
+        setError(error);
+        setSubmitting(false);
+      });
   },
 })(Form);
 
