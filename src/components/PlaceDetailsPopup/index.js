@@ -36,21 +36,33 @@ const Row = styled.div`
 
 const Title = styled.div`
   font-size: 16px;
+  cursor: pointer;
 `;
 
 class PlaceDetailsPopup extends React.Component {
   state = {
-    isOpen: false,
+    isOpen: false
   };
 
   render() {
     const { selectedPlace } = this.props;
+
     return (
       <Popup
         key={selectedPlace.id}
         coordinates={selectedPlace.entity.coordinates}
       >
-        <StyledPopup onClick={() => this.setState({ isOpen: true })}>
+        <StyledPopup
+          onClick={() => {
+            window.history.pushState(
+              { pageTitle: selectedPlace.entity.name },
+              "",
+              `/${selectedPlace.id}`
+            );
+
+            this.setState({ isOpen: true });
+          }}
+        >
           <Row>
             <Title>{selectedPlace.entity.name}</Title>
             <ThumbUp
@@ -58,7 +70,7 @@ class PlaceDetailsPopup extends React.Component {
                 fontSize: 16,
                 marginLeft: "25px",
                 marginRight: "5px",
-                marginTop: "2px",
+                marginTop: "2px"
               }}
             />
             <div>{selectedPlace.votes}</div>

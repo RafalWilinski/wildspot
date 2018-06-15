@@ -1,5 +1,7 @@
 import React, { Component } from "react";
+import styled from "styled-components";
 
+import Button from "@material-ui/core/Button";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import SignalWifiOff from "@material-ui/icons/SignalWifiOff";
@@ -27,17 +29,40 @@ import NotificationsOff from "@material-ui/icons/NotificationsOff";
 import Home from "@material-ui/icons/Home";
 import Pets from "@material-ui/icons/Pets";
 import Wc from "@material-ui/icons/Wc";
+import LocationOn from "@material-ui/icons/LocationOn";
+import ThumbUp from "@material-ui/icons/ThumbUp";
 
 const styles = theme => ({
   formControl: {
     margin: theme.spacing.unit,
-    minWidth: 120,
+    minWidth: 120
   },
   textField: {
     marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginRight: theme.spacing.unit
   },
+  button: {
+    margin: theme.spacing.unit
+  },
+  rightIcon: {
+    marginLeft: theme.spacing.unit
+  }
 });
+
+const Groundwork = styled.div`
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 10px;
+`;
+
+const Right = styled.div`
+  float: right;
+`;
+
+const ThumbsUpCount = styled(ThumbUp)`
+  margin-bottom: -3px;
+  margin-right: 3px;
+`;
 
 class PlaceDetailsModal extends Component {
   render() {
@@ -49,15 +74,21 @@ class PlaceDetailsModal extends Component {
         onClose={onClose}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title" onClick={onClose}>
+        <DialogTitle id="form-dialog-title">
           {selectedPlace.entity.name}
+          <Right>
+            <ThumbsUpCount className={classes.rightIcon} />
+            {selectedPlace.votes}
+          </Right>
         </DialogTitle>
-        <DialogContent onClick={onClose}>
+        <DialogContent>
           <DialogContentText>
             {selectedPlace.entity.description}
           </DialogContentText>
           {selectedPlace.entity.groundwork && (
-            <div>Groundwork: {selectedPlace.entity.groundwork}</div>
+            <Groundwork>
+              Groundwork: {selectedPlace.entity.groundwork}
+            </Groundwork>
           )}
           <FormControlLabel
             control={
@@ -256,13 +287,55 @@ class PlaceDetailsModal extends Component {
             }
             label="WC Nearby"
           />
-          <GridList cellHeight={160} className={classes.gridList} cols={3}>
+          <GridList
+            cellHeight={160}
+            className={classes.gridList}
+            cols={3}
+            style={{ marginTop: "10px" }}
+          >
             {(selectedPlace.entity.images || []).filter(Boolean).map(img => (
               <GridListTile key={img} cols={1}>
                 <img src={img} />
               </GridListTile>
             ))}
           </GridList>
+          <a
+            href={`https://www.google.com/maps/search/?api=1&query=${
+              selectedPlace.entity.coordinates[1]
+            },${selectedPlace.entity.coordinates[0]}`}
+            target="_blank"
+            style={{ textDecoration: "none" }}
+          >
+            <Button
+              mini
+              variant="contained"
+              color="primary"
+              className={classes.button}
+              style={{ marginTop: "20px" }}
+            >
+              Open in Google Maps
+              <LocationOn className={classes.rightIcon} />
+            </Button>
+          </a>
+          <Button
+            mini
+            variant="contained"
+            color="secondary"
+            className={classes.button}
+            style={{ marginTop: "20px" }}
+          >
+            Upvote this place
+            <ThumbUp className={classes.rightIcon} />
+          </Button>
+          <Button
+            mini
+            variant="contained"
+            color="secondary"
+            className={classes.button}
+            style={{ marginTop: "20px" }}
+          >
+            Copy URL
+          </Button>
         </DialogContent>
       </Dialog>
     );
