@@ -31,22 +31,24 @@ import Pets from "@material-ui/icons/Pets";
 import Wc from "@material-ui/icons/Wc";
 import LocationOn from "@material-ui/icons/LocationOn";
 import ThumbUp from "@material-ui/icons/ThumbUp";
+import Link from "@material-ui/icons/Link";
+import { IconButton } from "@material-ui/core";
 
 const styles = theme => ({
   formControl: {
     margin: theme.spacing.unit,
-    minWidth: 120
+    minWidth: 120,
   },
   textField: {
     marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit
+    marginRight: theme.spacing.unit,
   },
   button: {
-    margin: theme.spacing.unit
+    margin: theme.spacing.unit,
   },
   rightIcon: {
-    marginLeft: theme.spacing.unit
-  }
+    marginLeft: theme.spacing.unit,
+  },
 });
 
 const Groundwork = styled.div`
@@ -57,11 +59,16 @@ const Groundwork = styled.div`
 
 const Right = styled.div`
   float: right;
+  margin-top: -20px;
 `;
 
-const ThumbsUpCount = styled(ThumbUp)`
-  margin-bottom: -3px;
-  margin-right: 3px;
+const ThumbsUpCount = styled.div`
+  font-size: 10px;
+  margin-left: 5px;
+`;
+
+const StyledDialogTitle = styled(DialogTitle)`
+  padding-bottom: 0;
 `;
 
 class PlaceDetailsModal extends Component {
@@ -74,13 +81,29 @@ class PlaceDetailsModal extends Component {
         onClose={onClose}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">
+        <StyledDialogTitle id="form-dialog-title">
           {selectedPlace.entity.name}
           <Right>
-            <ThumbsUpCount className={classes.rightIcon} />
-            {selectedPlace.votes}
+            <a
+              href={`https://www.google.com/maps/search/?api=1&query=${
+                selectedPlace.entity.coordinates[1]
+              },${selectedPlace.entity.coordinates[0]}`}
+              target="_blank"
+              style={{ textDecoration: "none" }}
+            >
+              <IconButton className={classes.button}>
+                <LocationOn />
+              </IconButton>
+            </a>
+            <IconButton className={classes.button}>
+              <Link />
+            </IconButton>
+            <IconButton>
+              <ThumbUp />
+              <ThumbsUpCount>{selectedPlace.votes}</ThumbsUpCount>
+            </IconButton>
           </Right>
-        </DialogTitle>
+        </StyledDialogTitle>
         <DialogContent>
           <DialogContentText>
             {selectedPlace.entity.description}
@@ -299,43 +322,6 @@ class PlaceDetailsModal extends Component {
               </GridListTile>
             ))}
           </GridList>
-          <a
-            href={`https://www.google.com/maps/search/?api=1&query=${
-              selectedPlace.entity.coordinates[1]
-            },${selectedPlace.entity.coordinates[0]}`}
-            target="_blank"
-            style={{ textDecoration: "none" }}
-          >
-            <Button
-              mini
-              variant="contained"
-              color="primary"
-              className={classes.button}
-              style={{ marginTop: "20px" }}
-            >
-              Open in Google Maps
-              <LocationOn className={classes.rightIcon} />
-            </Button>
-          </a>
-          <Button
-            mini
-            variant="contained"
-            color="secondary"
-            className={classes.button}
-            style={{ marginTop: "20px" }}
-          >
-            Upvote this place
-            <ThumbUp className={classes.rightIcon} />
-          </Button>
-          <Button
-            mini
-            variant="contained"
-            color="secondary"
-            className={classes.button}
-            style={{ marginTop: "20px" }}
-          >
-            Copy URL
-          </Button>
         </DialogContent>
       </Dialog>
     );

@@ -1,5 +1,7 @@
 import React from "react";
 import { Feature, Layer } from "react-mapbox-gl";
+import Spinner from "react-spinkit";
+import styled from "styled-components";
 
 import firebase from "./firebase";
 import Map from "./mapbox";
@@ -13,16 +15,23 @@ const containerStyle = {
   width: "100vw",
 };
 
+const CoverText = styled.p`
+  line-height: 1.15;
+`;
+
 class App extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
+      isMapLoading: true,
       places: [],
       selectedPlace: { entity: {} },
       isAdding: false,
+      isFirebaseDataLoading: true,
       isShowingAddCover: false,
       isShowingAddForm: false,
-      currentCenter: [-0.481747846041145, 51.3233379650232],
+      currentCenter: [-0.2401928739864161, 51.52677435907751],
     };
   }
 
@@ -32,7 +41,10 @@ class App extends React.Component {
       const json = snap.val();
 
       Object.keys(json).map(key => {
-        return this.setState({ places: [...this.state.places, json[key]] });
+        return this.setState({
+          places: [...this.state.places, json[key]],
+          isFirebaseDataLoading: false,
+        });
       });
     });
   }
@@ -82,6 +94,13 @@ class App extends React.Component {
     });
   };
 
+  renderDataLoadingSpinner = () =>
+    this.state.isMapLoading && (
+      <Cover>
+        <Spinner name="cube-grid" fadeIn="none" color="#3f51b5" />
+      </Cover>
+    );
+
   renderCampsites = () => (
     <Layer
       type="symbol"
@@ -109,10 +128,9 @@ class App extends React.Component {
 
   renderCover = () =>
     this.state.isShowingAddCover && (
-      <Cover
-        onClick={this.onCloseCover}
-        text="Drag a dot to select exact place"
-      />
+      <Cover onClick={this.onCloseCover}>
+        <CoverText>Drag a dot to select exact place</CoverText>
+      </Cover>
     );
 
   renderAddFeature = () =>
@@ -133,29 +151,36 @@ class App extends React.Component {
     const { selectedPlace, isShowingAddForm, currentCenter } = this.state;
 
     return (
-      <Map
-        style="mapbox://styles/mapbox/outdoors-v9"
-        containerStyle={containerStyle}
-        onMoveEnd={this.onMoveEnd}
-        center={selectedPlace.entity.coordinates}
-      >
-        {this.renderCampsites()}
-        {this.renderPlaceDetails()}
-        {this.renderCover()}
-        {this.renderAddFeature()}
-        <AddPlaceMenu
-          isAdding={this.state.isAdding}
-          classes={this.props.classes}
-          onConfirmLocation={this.onConfirmLocation}
-          onAddingPlace={this.onAddingPlace}
-          onCancelAdding={this.onCancelAdding}
-        />
-        <AddPlaceForm
-          isOpen={isShowingAddForm}
-          coordinates={currentCenter}
-          onCloseForm={this.onCancelAdding}
-        />
-      </Map>
+      <React.Fragment>
+        {this.renderDataLoadingSpinner()}
+        <Map
+          style="mapbox://styles/mapbox/outdoors-v9"
+          containerStyle={containerStyle}
+          onMoveEnd={this.onMoveEnd}
+          onMove={this.onMoveEnd}
+          center={selectedPlace.entity.coordinates}
+          onStyleLoad={() =>
+            setTimeout(() => this.setState({ isMapLoading: false }), 1000)
+          }
+        >
+          {this.renderCampsites()}
+          {this.renderPlaceDetails()}
+          {this.renderCover()}
+          {this.renderAddFeature()}
+          <AddPlaceMenu
+            isAdding={this.state.isAdding}
+            classes={this.props.classes}
+            onConfirmLocation={this.onConfirmLocation}
+            onAddingPlace={this.onAddingPlace}
+            onCancelAdding={this.onCancelAdding}
+          />
+          <AddPlaceForm
+            isOpen={isShowingAddForm}
+            coordinates={currentCenter}
+            onCloseForm={this.onCancelAdding}
+          />
+        </Map>
+      </React.Fragment>
     );
   }
 }
