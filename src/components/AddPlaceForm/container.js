@@ -7,13 +7,12 @@ import Form from "./index";
 const AddPlaceForm = withFormik({
   enableReinitialize: true,
   mapPropsToValues: props => ({
-      name: "",
-      images: [],
-      description: "",
-      features: {},
-      coordinates: props.coordinates,
-    })
-  },
+    name: "",
+    images: [],
+    description: "",
+    features: {},
+    coordinates: props.coordinates,
+  }),
   validate: (values, props) => {
     const errors = {};
     if (!values.name) {
