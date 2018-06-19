@@ -7,7 +7,6 @@ import Form from "./index";
 const AddPlaceForm = withFormik({
   enableReinitialize: true,
   mapPropsToValues: props => {
-    console.log(props);
     return {
       name: "",
       images: [],
