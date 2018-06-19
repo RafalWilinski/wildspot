@@ -40,12 +40,12 @@ class App extends React.Component {
     this.firebaseCallback = this.firebaseRef.on("value", snap => {
       const json = snap.val();
 
-      Object.keys(json).map(key => {
-        return this.setState({
+      Object.keys(json).map(key =>
+        this.setState({
           places: [...this.state.places, json[key]],
           isFirebaseDataLoading: false,
-        });
-      });
+        }),
+      );
     });
   }
 
