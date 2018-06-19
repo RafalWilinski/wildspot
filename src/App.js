@@ -1,6 +1,5 @@
 import React from "react";
 import { Feature, Layer } from "react-mapbox-gl";
-import Spinner from "react-spinkit";
 import styled from "styled-components";
 
 import firebase from "./firebase";
@@ -19,12 +18,27 @@ const CoverText = styled.p`
   line-height: 1.15;
 `;
 
+const loadingTexts = [
+  "🏕",
+  "⛺️",
+  "🐮",
+  "🦌",
+  "🌊",
+  "🏖",
+  "⛱",
+  "⛰",
+  "☀️",
+  "⛵️",
+  "🚲",
+];
+
 class App extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
       isMapLoading: true,
+      loadingText: "",
       places: [],
       selectedPlace: { entity: {} },
       isAdding: false,
@@ -33,6 +47,17 @@ class App extends React.Component {
       isShowingAddForm: false,
       currentCenter: [-0.2401928739864161, 51.52677435907751],
     };
+  }
+
+  componentWillMount() {
+    this.loadingTextChangeInterval = setInterval(
+      () =>
+        this.setState({
+          loadingText:
+            loadingTexts[Math.floor(Math.random() * loadingTexts.length)],
+        }),
+      200,
+    );
   }
 
   componentDidMount() {
@@ -95,11 +120,7 @@ class App extends React.Component {
   };
 
   renderDataLoadingSpinner = () =>
-    this.state.isMapLoading && (
-      <Cover>
-        <Spinner name="cube-grid" fadeIn="none" color="#3f51b5" />
-      </Cover>
-    );
+    this.state.isMapLoading && <Cover>{this.state.loadingText}</Cover>;
 
   renderCampsites = () => (
     <Layer
@@ -160,7 +181,10 @@ class App extends React.Component {
           onMove={this.onMoveEnd}
           center={selectedPlace.entity.coordinates}
           onStyleLoad={() =>
-            setTimeout(() => this.setState({ isMapLoading: false }), 1000)
+            setTimeout(() => {
+              this.setState({ isMapLoading: false });
+              clearInterval(this.loadingTextChangeInterval);
+            }, 1000)
           }
         >
           {this.renderCampsites()}
