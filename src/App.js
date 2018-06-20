@@ -141,6 +141,7 @@ class App extends React.Component {
   onMarkClick = selectedPlace => {
     this.setState({
       selectedPlace,
+      currentCenter: selectedPlace.entity.coordinates,
     });
   };
 
@@ -260,7 +261,7 @@ class App extends React.Component {
           containerStyle={containerStyle}
           onMoveEnd={this.onMove}
           onMove={throttle(this.onMove, 100)}
-          center={selectedPlace.entity.coordinates}
+          center={currentCenter}
           onStyleLoad={this.onStyleLoad}
         >
           {this.renderCampsites()}
