@@ -1,10 +1,11 @@
+/* eslint jsx-a11y/accessible-emoji: 0 */
+
 import React, { Component } from "react";
 import styled from "styled-components";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
 import { withStyles } from "@material-ui/core/styles";
 import Dialog from "@material-ui/core/Dialog";
-import Button from "@material-ui/core/Button";
 import DialogActions from "@material-ui/core/DialogActions";
 import GridListTile from "@material-ui/core/GridListTile";
 import GridList from "@material-ui/core/GridList";
@@ -51,7 +52,8 @@ const StyledDialogTitle = styled(DialogTitle)`
   padding-bottom: 0;
 `;
 
-const Emoji = styled.p`
+const Emoji = styled.span`
+  display: block;
   color: ${props => (props.disabled ? "rgba(0.5, 0.5, 0.5, 0.5)" : "black")};
   margin: 0;
 `;
