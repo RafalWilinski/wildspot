@@ -11,6 +11,7 @@ import AddPlaceForm from "./components/AddPlaceForm/container";
 import AddPlaceMenu from "./components/AddPlaceMenu";
 import Cover from "./components/Cover";
 import PlaceDetailsPopup from "./components/PlaceDetailsPopup";
+import Tutorial from "./components/Tutorial";
 
 const containerStyle = {
   height: "100vh",
@@ -128,6 +129,13 @@ class App extends React.Component {
     });
   };
 
+  onStyleLoad = () => {
+    setTimeout(() => {
+      this.setState({ isMapLoading: false });
+      clearInterval(this.loadingTextChangeInterval);
+    }, 1000);
+  };
+
   renderDataLoadingSpinner = () =>
     this.state.isMapLoading && <Cover>{this.state.loadingText}</Cover>;
 
@@ -192,31 +200,30 @@ class App extends React.Component {
           onMoveEnd={this.onMoveEnd}
           onMove={throttle(this.onMoveEnd, 100)}
           center={selectedPlace.entity.coordinates}
-          onStyleLoad={() =>
-            setTimeout(() => {
-              this.setState({ isMapLoading: false });
-              clearInterval(this.loadingTextChangeInterval);
-            }, 1000)
-          }
+          onStyleLoad={this.onStyleLoad}
         >
-          <Snackbar text={this.state.notificationText} />
           {this.renderCampsites()}
           {this.renderPlaceDetails()}
-          {this.renderCover()}
-          {this.renderAddFeature()}
-          <AddPlaceMenu
-            isAdding={this.state.isAdding}
-            classes={this.props.classes}
-            onConfirmLocation={this.onConfirmLocation}
-            onAddingPlace={this.onAddingPlace}
-            onCancelAdding={this.onCancelAdding}
-          />
-          <AddPlaceForm
-            isOpen={isShowingAddForm}
-            coordinates={currentCenter}
-            onCloseForm={this.onCancelAdding}
-          />
         </Map>
+
+        {this.renderCover()}
+        {this.renderAddFeature()}
+
+        <AddPlaceMenu
+          isAdding={this.state.isAdding}
+          classes={this.props.classes}
+          onConfirmLocation={this.onConfirmLocation}
+          onAddingPlace={this.onAddingPlace}
+          onCancelAdding={this.onCancelAdding}
+        />
+        <AddPlaceForm
+          isOpen={isShowingAddForm}
+          coordinates={currentCenter}
+          onCloseForm={this.onCancelAdding}
+        />
+
+        <Snackbar text={this.state.notificationText} />
+        <Tutorial />
       </React.Fragment>
     );
   }

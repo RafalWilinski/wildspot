@@ -26,5 +26,8 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "deploy": "yarn build && s3-website deploy"
+  },
+  "devDependencies": {
+    "s3-website": "^3.3.0"
   }
 }
