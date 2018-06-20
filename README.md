@@ -1,4 +1,4 @@
-# Wildspot
+# 🏕 Wildspot
 
 Firebase + React based app for finding your next best spot for breaking up a wild camp!
 
