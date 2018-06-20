@@ -24,8 +24,13 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import DeleteIcon from "@material-ui/icons/Delete";
-
+import withMobileDialog from "@material-ui/core/withMobileDialog";
+import Slide from "@material-ui/core/Slide";
 import firebase from "../../firebase";
+
+function Transition(props) {
+  return <Slide direction="up" {...props} />;
+}
 
 const styles = theme => ({
   formControl: {
@@ -43,6 +48,13 @@ const styles = theme => ({
     display: "block",
     margin: theme.spacing.unit * 2,
   },
+  root: {
+    opacity: 0.2,
+    "&$checked": {
+      opacity: 1,
+    },
+  },
+  checked: {},
 });
 
 const StyledIconButton = styled(IconButton)`
@@ -103,13 +115,16 @@ class AddPlaceForm extends Component {
       onCloseForm,
       isSubmitting,
       classes,
+      fullScreen,
     } = this.props;
 
     return (
       <Dialog
+        fullScreen={fullScreen}
         open={isOpen}
         onClose={this.handleClose}
         aria-labelledby="form-dialog-title"
+        TransitionComponent={Transition}
       >
         <DialogTitle id="form-dialog-title">Add a spot</DialogTitle>
         <DialogContent>
@@ -155,7 +170,10 @@ class AddPlaceForm extends Component {
                 onChange={handleChange}
                 icon={"📵"}
                 checkedIcon={"📡"}
-                value="checkedH"
+                classes={{
+                  root: classes.root,
+                  checked: classes.checked,
+                }}
               />
             }
             label="WiFi Access"
@@ -167,7 +185,10 @@ class AddPlaceForm extends Component {
                 onChange={handleChange}
                 icon={"🚨"}
                 checkedIcon={"🔌"}
-                value="checkedH"
+                classes={{
+                  root: classes.root,
+                  checked: classes.checked,
+                }}
               />
             }
             label="A/C Power Access"
@@ -179,7 +200,10 @@ class AddPlaceForm extends Component {
                 onChange={handleChange}
                 icon={"🛒"}
                 checkedIcon={"🛒"}
-                value="checkedH"
+                classes={{
+                  root: classes.root,
+                  checked: classes.checked,
+                }}
               />
             }
             label="Grocery Nearby"
@@ -191,7 +215,10 @@ class AddPlaceForm extends Component {
                 onChange={handleChange}
                 icon={"🚰"}
                 checkedIcon={"🚰"}
-                value="checkedH"
+                classes={{
+                  root: classes.root,
+                  checked: classes.checked,
+                }}
               />
             }
             label="Water Access"
@@ -203,7 +230,10 @@ class AddPlaceForm extends Component {
                 onChange={handleChange}
                 icon={"📶"}
                 checkedIcon={"📶"}
-                value="checkedH"
+                classes={{
+                  root: classes.root,
+                  checked: classes.checked,
+                }}
               />
             }
             label="Cellular Access"
@@ -213,9 +243,12 @@ class AddPlaceForm extends Component {
               <Checkbox
                 id="features.car"
                 onChange={handleChange}
-                icon={"🚙"}
-                checkedIcon={"🚙"}
-                value="checkedH"
+                icon={"🚗"}
+                checkedIcon={"🚗"}
+                classes={{
+                  root: classes.root,
+                  checked: classes.checked,
+                }}
               />
             }
             label="Accessible by car"
@@ -227,7 +260,10 @@ class AddPlaceForm extends Component {
                 onChange={handleChange}
                 icon={"😔"}
                 checkedIcon={"🍽"}
-                value="checkedH"
+                classes={{
+                  root: classes.root,
+                  checked: classes.checked,
+                }}
               />
             }
             label="Food nearby"
@@ -239,7 +275,10 @@ class AddPlaceForm extends Component {
                 onChange={handleChange}
                 icon={"⛽️"}
                 checkedIcon={"⛽️"}
-                value="checkedH"
+                classes={{
+                  root: classes.root,
+                  checked: classes.checked,
+                }}
               />
             }
             label="Gas station nearby"
@@ -251,7 +290,10 @@ class AddPlaceForm extends Component {
                 onChange={handleChange}
                 icon={"🏖"}
                 checkedIcon={"🏖"}
-                value="checkedH"
+                classes={{
+                  root: classes.root,
+                  checked: classes.checked,
+                }}
               />
             }
             label="Beach Access"
@@ -263,7 +305,10 @@ class AddPlaceForm extends Component {
                 onChange={handleChange}
                 icon={"👨‍👩‍👧‍👦"}
                 checkedIcon={"💆‍"}
-                value="checkedH"
+                classes={{
+                  root: classes.root,
+                  checked: classes.checked,
+                }}
               />
             }
             label="Crowded / Empty"
@@ -276,7 +321,10 @@ class AddPlaceForm extends Component {
                 onChange={handleChange}
                 icon={"📣"}
                 checkedIcon={"🤫"}
-                value="checkedH"
+                classes={{
+                  root: classes.root,
+                  checked: classes.checked,
+                }}
               />
             }
             label="Loud / Quiet"
@@ -288,7 +336,10 @@ class AddPlaceForm extends Component {
                 icon={"🏕"}
                 id="features.campingAllowed"
                 checkedIcon={"🏕"}
-                value="checkedH"
+                classes={{
+                  root: classes.root,
+                  checked: classes.checked,
+                }}
               />
             }
             label="Camping Allowed"
@@ -300,7 +351,10 @@ class AddPlaceForm extends Component {
                 icon={"🙈"}
                 id="features.pets"
                 checkedIcon={"🐯"}
-                value="checkedH"
+                classes={{
+                  root: classes.root,
+                  checked: classes.checked,
+                }}
               />
             }
             label="Animals Nearby"
@@ -312,7 +366,10 @@ class AddPlaceForm extends Component {
                 id="features.wc"
                 icon={"🚽"}
                 checkedIcon={"🚽"}
-                value="checkedH"
+                classes={{
+                  root: classes.root,
+                  checked: classes.checked,
+                }}
               />
             }
             label="WC Nearby"
@@ -331,6 +388,7 @@ class AddPlaceForm extends Component {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
+                marginTop: "10px",
               }}
             >
               <Chip label="Upload place images" className={classes.chip} />
@@ -390,4 +448,4 @@ class AddPlaceForm extends Component {
   }
 }
 
-export default withStyles(styles)(AddPlaceForm);
+export default withMobileDialog()(withStyles(styles)(AddPlaceForm));

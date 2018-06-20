@@ -54,7 +54,7 @@ const StyledDialogTitle = styled(DialogTitle)`
 
 const Emoji = styled.span`
   display: block;
-  color: ${props => (props.disabled ? "rgba(0.5, 0.5, 0.5, 0.5)" : "black")};
+  opacity: ${props => (props.disabled ? 0.2 : 1)};
   margin: 0;
 `;
 
