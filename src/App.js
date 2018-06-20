@@ -1,6 +1,7 @@
 import React from "react";
 import { Feature, Layer } from "react-mapbox-gl";
 import styled from "styled-components";
+import throttle from "lodash.throttle";
 
 import Snackbar from "./components/Snackbar";
 import loadingTexts from "./consts/loadingTexts";
@@ -176,7 +177,7 @@ class App extends React.Component {
           style="mapbox://styles/mapbox/outdoors-v9"
           containerStyle={containerStyle}
           onMoveEnd={this.onMoveEnd}
-          onMove={this.onMoveEnd}
+          onMove={throttle(this.onMoveEnd, 100)}
           center={selectedPlace.entity.coordinates}
           onStyleLoad={() =>
             setTimeout(() => {
