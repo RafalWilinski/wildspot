@@ -20,9 +20,13 @@ class Tutorial extends Component {
   render() {
     return (
       <Dialog onClose={this.onTutorialHide} open={this.state.showTutorial}>
-        <DialogTitle>Welcome to Wildspot!</DialogTitle>
+        <DialogTitle>🏕 Welcome to Wildspot!</DialogTitle>
         <DialogContent>
-          <DialogContentText>Desc</DialogContentText>
+          <DialogContentText>
+            Wildspot is a crowdsourced map of best wild places where you can
+            setup up your tent. <br /> <br /> Discover picturesque spots and
+            help others find them too!
+          </DialogContentText>
         </DialogContent>
       </Dialog>
     );
