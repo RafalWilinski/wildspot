@@ -11,6 +11,7 @@ import AddPlaceForm from "./components/AddPlaceForm/container";
 import AddPlaceMenu from "./components/AddPlaceMenu";
 import Cover from "./components/Cover";
 import PlaceDetailsPopup from "./components/PlaceDetailsPopup";
+import PlaceDetailsModal from "./components/PlaceDetailsModal";
 import Tutorial from "./components/Tutorial";
 
 const containerStyle = {
@@ -47,15 +48,21 @@ class App extends React.Component {
 
     this.state = {
       isMapLoading: true,
-      loadingText: "",
-      notificationText: "",
-      places: [],
-      selectedPlace: { entity: {} },
+      isPlaceDetailsModalOpen: false,
       isAdding: false,
       isFirebaseDataLoading: true,
       isShowingAddCover: false,
       isShowingAddForm: false,
+      loadingText: "",
+      notificationText: "",
+      places: [],
       currentCenter: [-0.2401928739864161, 51.52677435907751],
+      selectedPlace: {
+        entity: {
+          features: {},
+          coordinates: [-0.2401928739864161, 51.52677435907751],
+        },
+      },
     };
   }
 
@@ -137,7 +144,7 @@ class App extends React.Component {
     });
   };
 
-  onMoveEnd = e => {
+  onMove = e => {
     this.setState({
       currentCenter: [e.transform._center.lng, e.transform._center.lat],
     });
@@ -191,10 +198,14 @@ class App extends React.Component {
     const { selectedPlace } = this.state;
 
     return (
-      selectedPlace.entity.coordinates && (
+      selectedPlace.entity.name && (
         <PlaceDetailsPopup
           selectedPlace={selectedPlace}
-          onChangeNotificationText={this.onChangeNotificationText}
+          onPlaceDetailsModalOpen={() =>
+            this.setState({
+              isPlaceDetailsModalOpen: true,
+            })
+          }
         />
       )
     );
@@ -206,6 +217,20 @@ class App extends React.Component {
         <CoverText>Drag a dot to select exact place</CoverText>
       </Cover>
     );
+
+  renderPlaceDetailsModal = () => (
+    <PlaceDetailsModal
+      onChangeNotificationText={this.onChangeNotificationText}
+      isOpen={this.state.isPlaceDetailsModalOpen}
+      selectedPlace={this.state.selectedPlace}
+      onClose={e => {
+        this.setState({ isPlaceDetailsModalOpen: false });
+
+        e.preventDefault();
+        e.stopPropagation();
+      }}
+    />
+  );
 
   renderAddFeature = () =>
     this.state.isAdding && (
@@ -231,8 +256,8 @@ class App extends React.Component {
         <Map
           style="mapbox://styles/mapbox/outdoors-v9" // eslint-disable-line react/style-prop-object
           containerStyle={containerStyle}
-          onMoveEnd={this.onMoveEnd}
-          onMove={throttle(this.onMoveEnd, 100)}
+          onMoveEnd={this.onMove}
+          onMove={throttle(this.onMove, 100)}
           center={selectedPlace.entity.coordinates}
           onStyleLoad={this.onStyleLoad}
         >
@@ -242,6 +267,7 @@ class App extends React.Component {
         </Map>
 
         {this.renderCover()}
+        {this.renderPlaceDetailsModal()}
 
         <AddPlaceMenu
           isAdding={this.state.isAdding}
@@ -250,6 +276,7 @@ class App extends React.Component {
           onAddingPlace={this.onAddingPlace}
           onCancelAdding={this.onCancelAdding}
         />
+
         <AddPlaceForm
           isOpen={isShowingAddForm}
           coordinates={currentCenter}

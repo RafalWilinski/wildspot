@@ -4,8 +4,6 @@ import { Popup } from "react-mapbox-gl";
 
 import ThumbUp from "@material-ui/icons/ThumbUp";
 
-import PlaceDetailsModal from "../PlaceDetailsModal";
-
 const StyledPopup = styled.div`
   background: white;
   color: #3f618c;
@@ -27,12 +25,8 @@ const Title = styled.div`
 `;
 
 class PlaceDetailsPopup extends React.Component {
-  state = {
-    isOpen: false,
-  };
-
   render() {
-    const { selectedPlace, onChangeNotificationText } = this.props;
+    const { selectedPlace } = this.props;
 
     return (
       <Popup
@@ -47,7 +41,7 @@ class PlaceDetailsPopup extends React.Component {
               `/${selectedPlace.id}`,
             );
 
-            this.setState({ isOpen: true });
+            this.props.onPlaceDetailsModalOpen();
           }}
         >
           <Row>
@@ -78,18 +72,6 @@ class PlaceDetailsPopup extends React.Component {
             {selectedPlace.entity.features.notCrowded && "👨‍👨‍👧‍👧"}
             {selectedPlace.entity.features.grocery && "🛒"}
           </Row>
-
-          <PlaceDetailsModal
-            onChangeNotificationText={onChangeNotificationText}
-            isOpen={this.state.isOpen}
-            selectedPlace={selectedPlace}
-            onClose={e => {
-              this.setState({ isOpen: false });
-
-              e.preventDefault();
-              e.stopPropagation();
-            }}
-          />
         </StyledPopup>
       </Popup>
     );

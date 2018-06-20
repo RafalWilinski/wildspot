@@ -3,6 +3,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import { Helmet } from "react-helmet";
 
 import { withStyles } from "@material-ui/core/styles";
 import Dialog from "@material-ui/core/Dialog";
@@ -81,6 +82,16 @@ class PlaceDetailsModal extends Component {
         aria-labelledby="form-dialog-title"
         TransitionComponent={Transition}
       >
+        <Helmet>
+          <title>{isOpen ? selectedPlace.entity.name : "Wildspot"}</title>
+          <meta
+            name="description"
+            content={`Description of ${selectedPlace.entity.name}: ${
+              selectedPlace.entity.description
+            }`}
+          />
+        </Helmet>
+
         {fullScreen && (
           <IconButton color="inherit" onClick={onClose} aria-label="Close">
             <CloseIcon />
