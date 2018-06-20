@@ -71,6 +71,7 @@ class App extends React.Component {
   onAddingPlace = () => {
     this.setState({
       isShowingAddCover: true,
+      selectedPlace: { entity: {} },
       isAdding: false,
     });
   };
