@@ -2,6 +2,7 @@ import React from "react";
 import { Feature, Layer } from "react-mapbox-gl";
 import styled from "styled-components";
 
+import loadingTexts from "./consts/loadingTexts";
 import firebase from "./firebase";
 import Map from "./mapbox";
 import AddPlaceForm from "./components/AddPlaceForm/container";
@@ -17,20 +18,6 @@ const containerStyle = {
 const CoverText = styled.p`
   line-height: 1.15;
 `;
-
-const loadingTexts = [
-  "🏕",
-  "⛺️",
-  "🐮",
-  "🦌",
-  "🌊",
-  "🏖",
-  "⛱",
-  "⛰",
-  "☀️",
-  "⛵️",
-  "🚲",
-];
 
 class App extends React.Component {
   constructor(props) {
