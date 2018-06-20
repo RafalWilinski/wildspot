@@ -22,7 +22,6 @@ const Row = styled.div`
 `;
 
 const Title = styled.div`
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   font-size: 16px;
   cursor: pointer;
 `;
