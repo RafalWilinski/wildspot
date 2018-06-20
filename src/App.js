@@ -56,12 +56,12 @@ class App extends React.Component {
     this.firebaseCallback = this.firebaseRef.on("value", snap => {
       const json = snap.val();
 
-      Object.keys(json).map(key => {
+      Object.keys(json).map(key =>
         this.setState({
           places: [...this.state.places, json[key]],
           isFirebaseDataLoading: false,
-        });
-      });
+        }),
+      );
 
       if (window.location.pathname) {
         const selectedPlace = this.state.places.filter(
@@ -196,7 +196,7 @@ class App extends React.Component {
         {this.renderDataLoadingSpinner()}
 
         <Map
-          style="mapbox://styles/mapbox/outdoors-v9"
+          style="mapbox://styles/mapbox/outdoors-v9" // eslint-disable-line react/style-prop-object
           containerStyle={containerStyle}
           onMoveEnd={this.onMoveEnd}
           onMove={throttle(this.onMoveEnd, 100)}

@@ -9,14 +9,10 @@ firebase.initializeApp({
 firebase
   .auth()
   .signInAnonymously()
-  .catch(function(error) {
-    var errorCode = error.code;
-    var errorMessage = error.message;
-  });
+  .catch(function(error) {});
 
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
-    var uid = user.uid;
     localStorage.setItem("uid", user.uid);
   }
 });

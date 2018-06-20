@@ -352,7 +352,7 @@ class AddPlaceForm extends Component {
             {values.images.filter(Boolean).map(
               img =>
                 img && (
-                  <GridListTile key={img} cols={1}>
+                  <GridListTile key={img} cols={1} alt="Image">
                     <StyledIconButton
                       className={classes.button}
                       aria-label="Delete"
@@ -360,7 +360,7 @@ class AddPlaceForm extends Component {
                     >
                       <DeleteIcon />
                     </StyledIconButton>
-                    <img src={img} />
+                    <img src={img} alt={`${this.props.values.name}`} />
                   </GridListTile>
                 ),
             )}

@@ -329,7 +329,7 @@ class PlaceDetailsModal extends Component {
           >
             {(selectedPlace.entity.images || []).filter(Boolean).map(img => (
               <GridListTile key={img} cols={1}>
-                <img src={img} />
+                <img src={img} alt={selectedPlace.entity.name} />
               </GridListTile>
             ))}
           </GridList>
