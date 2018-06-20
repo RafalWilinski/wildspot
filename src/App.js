@@ -2,6 +2,7 @@ import React from "react";
 import { Feature, Layer } from "react-mapbox-gl";
 import styled from "styled-components";
 
+import Snackbar from "./components/Snackbar";
 import loadingTexts from "./consts/loadingTexts";
 import firebase from "./firebase";
 import Map from "./mapbox";
@@ -26,6 +27,7 @@ class App extends React.Component {
     this.state = {
       isMapLoading: true,
       loadingText: "",
+      notificationText: "",
       places: [],
       selectedPlace: { entity: {} },
       isAdding: false,
@@ -69,6 +71,12 @@ class App extends React.Component {
     this.setState({
       isShowingAddCover: true,
       isAdding: false,
+    });
+  };
+
+  onChangeNotificationText = notificationText => {
+    this.setState({
+      notificationText,
     });
   };
 
@@ -129,7 +137,10 @@ class App extends React.Component {
 
     return (
       selectedPlace.entity.coordinates && (
-        <PlaceDetailsPopup selectedPlace={selectedPlace} />
+        <PlaceDetailsPopup
+          selectedPlace={selectedPlace}
+          onChangeNotificationText={this.onChangeNotificationText}
+        />
       )
     );
   };
@@ -174,6 +185,7 @@ class App extends React.Component {
             }, 1000)
           }
         >
+          <Snackbar text={this.state.notificationText} />
           {this.renderCampsites()}
           {this.renderPlaceDetails()}
           {this.renderCover()}

@@ -11,6 +11,7 @@
     "mapbox-gl": "^0.45.0",
     "prop-types": "^15.6.1",
     "react": "^16.4.0",
+    "react-copy-to-clipboard": "^5.0.1",
     "react-dom": "^16.4.0",
     "react-dropzone": "^4.2.11",
     "react-ga": "^2.5.3",

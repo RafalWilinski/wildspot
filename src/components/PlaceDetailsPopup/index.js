@@ -41,11 +41,11 @@ const Title = styled.div`
 
 class PlaceDetailsPopup extends React.Component {
   state = {
-    isOpen: false
+    isOpen: false,
   };
 
   render() {
-    const { selectedPlace } = this.props;
+    const { selectedPlace, onChangeNotificationText } = this.props;
 
     return (
       <Popup
@@ -57,7 +57,7 @@ class PlaceDetailsPopup extends React.Component {
             window.history.pushState(
               { pageTitle: selectedPlace.entity.name },
               "",
-              `/${selectedPlace.id}`
+              `/${selectedPlace.id}`,
             );
 
             this.setState({ isOpen: true });
@@ -70,7 +70,7 @@ class PlaceDetailsPopup extends React.Component {
                 fontSize: 16,
                 marginLeft: "25px",
                 marginRight: "5px",
-                marginTop: "2px"
+                marginTop: "2px",
               }}
             />
             <div>{selectedPlace.votes}</div>
@@ -93,6 +93,7 @@ class PlaceDetailsPopup extends React.Component {
           </Row>
 
           <PlaceDetailsModal
+            onChangeNotificationText={onChangeNotificationText}
             isOpen={this.state.isOpen}
             selectedPlace={selectedPlace}
             onClose={e => {

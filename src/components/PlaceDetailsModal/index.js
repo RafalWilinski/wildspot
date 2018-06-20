@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
-import Button from "@material-ui/core/Button";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import SignalWifiOff from "@material-ui/icons/SignalWifiOff";
@@ -73,7 +73,13 @@ const StyledDialogTitle = styled(DialogTitle)`
 
 class PlaceDetailsModal extends Component {
   render() {
-    const { isOpen, classes, selectedPlace, onClose } = this.props;
+    const {
+      isOpen,
+      classes,
+      selectedPlace,
+      onClose,
+      onChangeNotificationText,
+    } = this.props;
 
     return (
       <Dialog
@@ -95,9 +101,14 @@ class PlaceDetailsModal extends Component {
                 <LocationOn />
               </IconButton>
             </a>
-            <IconButton className={classes.button}>
-              <Link />
-            </IconButton>
+            <CopyToClipboard
+              text={window.location}
+              onCopy={() => onChangeNotificationText("Link copied!")}
+            >
+              <IconButton className={classes.button}>
+                <Link />
+              </IconButton>
+            </CopyToClipboard>
             <IconButton>
               <ThumbUp />
               <ThumbsUpCount>{selectedPlace.votes}</ThumbsUpCount>
