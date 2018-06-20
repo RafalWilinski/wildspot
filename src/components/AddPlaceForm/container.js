@@ -10,7 +10,7 @@ const AddPlaceForm = withFormik({
     name: "",
     images: [],
     description: "",
-    features: {},
+    features: { empty: true },
     coordinates: props.coordinates,
   }),
   validate: (values, props) => {
