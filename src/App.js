@@ -56,7 +56,10 @@ class App extends React.Component {
       loadingText: "",
       notificationText: "",
       places: [],
-      currentCenter: [-0.2401928739864161, 51.52677435907751],
+      currentCenter: localStorage.getItem("lastPos").split(",") || [
+        -0.2401928739864161,
+        51.52677435907751,
+      ],
       selectedPlace: {
         entity: {
           features: {},
@@ -149,6 +152,11 @@ class App extends React.Component {
     this.setState({
       currentCenter: [e.transform._center.lng, e.transform._center.lat],
     });
+
+    localStorage.setItem("lastPos", [
+      e.transform._center.lng,
+      e.transform._center.lat,
+    ]);
   };
 
   onConfirmLocation = () => {
