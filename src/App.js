@@ -194,6 +194,7 @@ class App extends React.Component {
     return (
       <React.Fragment>
         {this.renderDataLoadingSpinner()}
+
         <Map
           style="mapbox://styles/mapbox/outdoors-v9"
           containerStyle={containerStyle}
@@ -204,10 +205,10 @@ class App extends React.Component {
         >
           {this.renderCampsites()}
           {this.renderPlaceDetails()}
+          {this.renderAddFeature()}
         </Map>
 
         {this.renderCover()}
-        {this.renderAddFeature()}
 
         <AddPlaceMenu
           isAdding={this.state.isAdding}
