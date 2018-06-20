@@ -319,6 +319,7 @@ class AddPlaceForm extends Component {
           />
           {!this.state.isUploading && (
             <Dropzone
+              accept="image/jpeg, image/png"
               onDrop={this.onAttachFiles}
               style={{
                 height: "100px",
