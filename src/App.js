@@ -195,10 +195,12 @@ class App extends React.Component {
   );
 
   renderPlaceDetails = () => {
-    const { selectedPlace } = this.state;
+    const { selectedPlace, currentCenter } = this.state;
 
     return (
-      selectedPlace.entity.name && (
+      selectedPlace.entity &&
+      selectedPlace.entity.name &&
+      currentCenter[0] === selectedPlace.entity.coordinates[0] && (
         <PlaceDetailsPopup
           selectedPlace={selectedPlace}
           onPlaceDetailsModalOpen={() =>
