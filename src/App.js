@@ -1,5 +1,5 @@
 import React from "react";
-import { Feature, Layer } from "react-mapbox-gl";
+import { Feature, Layer, Cluster, Marker } from "react-mapbox-gl";
 import styled from "styled-components";
 import throttle from "lodash.throttle";
 
@@ -18,8 +18,27 @@ const containerStyle = {
   width: "100vw",
 };
 
+const styles = {
+  clusterMarker: {
+    width: 30,
+    height: 30,
+    borderRadius: "50%",
+    backgroundColor: "#51D5A0",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    color: "white",
+    border: "2px solid #56C498",
+    cursor: "pointer",
+  },
+};
 const CoverText = styled.p`
   line-height: 1.15;
+`;
+
+const Pin = styled.span`
+  margin-top: 5px;
+  font-size: 2em;
 `;
 
 class App extends React.Component {
@@ -39,6 +58,16 @@ class App extends React.Component {
       currentCenter: [-0.2401928739864161, 51.52677435907751],
     };
   }
+
+  clusterMarker = (coordinates, pointCount, getLeaves) => (
+    <Marker
+      key={coordinates.toString()}
+      coordinates={coordinates}
+      style={styles.clusterMarker}
+    >
+      <div>{pointCount}</div>
+    </Marker>
+  );
 
   componentWillMount() {
     this.loadingTextChangeInterval = setInterval(
@@ -140,18 +169,22 @@ class App extends React.Component {
     this.state.isMapLoading && <Cover>{this.state.loadingText}</Cover>;
 
   renderCampsites = () => (
-    <Layer
-      type="symbol"
-      layout={{ "icon-image": "campsite-15", "icon-size": 1.5 }}
-    >
-      {this.state.places.map(place => (
-        <Feature
-          key={place.id}
-          onClick={() => this.onMarkClick(place)}
+    <Cluster ClusterMarkerFactory={this.clusterMarker}>
+      {this.state.places.map((place, key) => (
+        <Marker
+          key={key}
+          style={styles.marker}
           coordinates={place.entity.coordinates}
-        />
+          data-feature={place}
+          onClick={() => this.onMarkClick(place)}
+        >
+          <Pin role="img" aria-label={place.entity.name}>
+            {/* // eslint-disable-next-line */}
+            ⛺️
+          </Pin>
+        </Marker>
       ))}
-    </Layer>
+    </Cluster>
   );
 
   renderPlaceDetails = () => {

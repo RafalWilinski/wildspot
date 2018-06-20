@@ -145,7 +145,7 @@ class AddPlaceForm extends Component {
           <FormControl
             className={this.props.classes.formControl}
             fullWidth
-            style={{ marginBottom: "10px" }}
+            style={{ margin: "0 0 20px" }}
           >
             <InputLabel htmlFor="age-helper">Groundwork</InputLabel>
             <Select
