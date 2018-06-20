@@ -342,10 +342,7 @@ class AddPlaceForm extends Component {
                 justifyContent: "center",
               }}
             >
-              <Chip
-                label="Try dropping some files here, or click to select files to upload."
-                className={classes.chip}
-              />
+              <Chip label="Upload place images" className={classes.chip} />
             </Dropzone>
           )}
           {this.state.isUploading && (
