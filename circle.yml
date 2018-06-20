@@ -24,7 +24,7 @@ jobs:
   invalidate:
     working_directory: ~/repo
     docker:
-      - image: my-awscli-image:1.0
+      - image: mikesir87/aws-cli
     steps:
       - run: aws cloudfront create-invalidation --distribution-id E2QGJ6HQUFY5DY --paths /
 
