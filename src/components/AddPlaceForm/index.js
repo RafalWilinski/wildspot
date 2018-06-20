@@ -23,25 +23,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import SignalWifiOff from "@material-ui/icons/SignalWifiOff";
-import SignalWifi3Bar from "@material-ui/icons/SignalWifi3Bar";
-import BatteryCharging90 from "@material-ui/icons/BatteryCharging90";
-import BatteryAlert from "@material-ui/icons/BatteryAlert";
-import LocalGroceryStore from "@material-ui/icons/LocalGroceryStore";
-import LocalDrink from "@material-ui/icons/LocalDrink";
-import SignalCellular4Bar from "@material-ui/icons/SignalCellular4Bar";
-import SignalCellularOff from "@material-ui/icons/SignalCellularOff";
-import DirectionsCar from "@material-ui/icons/DirectionsCar";
-import LocalDining from "@material-ui/icons/LocalDining";
-import LocalGasStation from "@material-ui/icons/LocalGasStation";
-import BeachAccess from "@material-ui/icons/BeachAccess";
-import Group from "@material-ui/icons/Group";
 import DeleteIcon from "@material-ui/icons/Delete";
-import NotificationsActive from "@material-ui/icons/NotificationsActive";
-import NotificationsOff from "@material-ui/icons/NotificationsOff";
-import Home from "@material-ui/icons/Home";
-import Pets from "@material-ui/icons/Pets";
-import Wc from "@material-ui/icons/Wc";
 
 import firebase from "../../firebase";
 
@@ -67,6 +49,10 @@ const StyledIconButton = styled(IconButton)`
   position: absolute !important;
   top: 0;
   z-index: 1000;
+`;
+
+const StyledFormControlLabel = styled(FormControlLabel)`
+  height: 32px;
 `;
 
 class AddPlaceForm extends Component {
@@ -141,7 +127,11 @@ class AddPlaceForm extends Component {
             name="name"
             fullWidth
           />
-          <FormControl className={this.props.classes.formControl} fullWidth>
+          <FormControl
+            className={this.props.classes.formControl}
+            fullWidth
+            style={{ marginBottom: "10px" }}
+          >
             <InputLabel htmlFor="age-helper">Groundwork</InputLabel>
             <Select
               value={values.groundwork}
@@ -158,170 +148,170 @@ class AddPlaceForm extends Component {
               Some grounds are not so suitable for tents
             </FormHelperText>
           </FormControl>
-          <FormControlLabel
+          <StyledFormControlLabel
             control={
               <Checkbox
                 id="features.wifi"
                 onChange={handleChange}
-                icon={<SignalWifiOff />}
-                checkedIcon={<SignalWifi3Bar />}
+                icon={"📵"}
+                checkedIcon={"📡"}
                 value="checkedH"
               />
             }
             label="WiFi Access"
           />
-          <FormControlLabel
+          <StyledFormControlLabel
             control={
               <Checkbox
                 id="features.ac"
                 onChange={handleChange}
-                icon={<BatteryAlert />}
-                checkedIcon={<BatteryCharging90 />}
+                icon={"🚨"}
+                checkedIcon={"🔌"}
                 value="checkedH"
               />
             }
             label="A/C Power Access"
           />
-          <FormControlLabel
+          <StyledFormControlLabel
             control={
               <Checkbox
                 id="features.grocery"
                 onChange={handleChange}
-                icon={<LocalGroceryStore />}
-                checkedIcon={<LocalGroceryStore />}
+                icon={"🛒"}
+                checkedIcon={"🛒"}
                 value="checkedH"
               />
             }
             label="Grocery Nearby"
           />
-          <FormControlLabel
+          <StyledFormControlLabel
             control={
               <Checkbox
                 id="features.water"
                 onChange={handleChange}
-                icon={<LocalDrink />}
-                checkedIcon={<LocalDrink />}
+                icon={"🚰"}
+                checkedIcon={"🚰"}
                 value="checkedH"
               />
             }
             label="Water Access"
           />
-          <FormControlLabel
+          <StyledFormControlLabel
             control={
               <Checkbox
                 id="features.cellular"
                 onChange={handleChange}
-                icon={<SignalCellularOff />}
-                checkedIcon={<SignalCellular4Bar />}
+                icon={"📶"}
+                checkedIcon={"📶"}
                 value="checkedH"
               />
             }
             label="Cellular Access"
           />
-          <FormControlLabel
+          <StyledFormControlLabel
             control={
               <Checkbox
                 id="features.car"
                 onChange={handleChange}
-                icon={<DirectionsCar />}
-                checkedIcon={<DirectionsCar />}
+                icon={"🚙"}
+                checkedIcon={"🚙"}
                 value="checkedH"
               />
             }
             label="Accessible by car"
           />
-          <FormControlLabel
+          <StyledFormControlLabel
             control={
               <Checkbox
                 id="features.food"
                 onChange={handleChange}
-                icon={<LocalDining />}
-                checkedIcon={<LocalDining />}
+                icon={"😔"}
+                checkedIcon={"🍽"}
                 value="checkedH"
               />
             }
             label="Food nearby"
           />
-          <FormControlLabel
+          <StyledFormControlLabel
             control={
               <Checkbox
                 id="features.gasStation"
                 onChange={handleChange}
-                icon={<LocalGasStation />}
-                checkedIcon={<LocalGasStation />}
+                icon={"⛽️"}
+                checkedIcon={"⛽️"}
                 value="checkedH"
               />
             }
             label="Gas station nearby"
           />
-          <FormControlLabel
+          <StyledFormControlLabel
             control={
               <Checkbox
                 id="features.beach"
                 onChange={handleChange}
-                icon={<BeachAccess />}
-                checkedIcon={<BeachAccess />}
+                icon={"🏖"}
+                checkedIcon={"🏖"}
                 value="checkedH"
               />
             }
             label="Beach Access"
           />
-          <FormControlLabel
+          <StyledFormControlLabel
             control={
               <Checkbox
                 id="features.notCrowded"
                 onChange={handleChange}
-                icon={<Group />}
-                checkedIcon={<Group />}
+                icon={"👨‍👩‍👧‍👦"}
+                checkedIcon={"💆‍"}
                 value="checkedH"
               />
             }
             label="Crowded / Empty"
           />
 
-          <FormControlLabel
+          <StyledFormControlLabel
             control={
               <Checkbox
                 id="features.quiet"
                 onChange={handleChange}
-                icon={<NotificationsActive />}
-                checkedIcon={<NotificationsOff />}
+                icon={"📣"}
+                checkedIcon={"🤫"}
                 value="checkedH"
               />
             }
             label="Loud / Quiet"
           />
-          <FormControlLabel
+          <StyledFormControlLabel
             control={
               <Checkbox
                 onChange={handleChange}
-                icon={<Home />}
+                icon={"🏕"}
                 id="features.campingAllowed"
-                checkedIcon={<Home />}
+                checkedIcon={"🏕"}
                 value="checkedH"
               />
             }
             label="Camping Allowed"
           />
-          <FormControlLabel
+          <StyledFormControlLabel
             control={
               <Checkbox
                 onChange={handleChange}
-                icon={<Pets />}
+                icon={"🙈"}
                 id="features.pets"
-                checkedIcon={<Pets />}
+                checkedIcon={"🐯"}
                 value="checkedH"
               />
             }
             label="Animals Nearby"
           />
-          <FormControlLabel
+          <StyledFormControlLabel
             control={
               <Checkbox
                 onChange={handleChange}
                 id="features.wc"
-                icon={<Wc />}
-                checkedIcon={<Wc />}
+                icon={"🚽"}
+                checkedIcon={"🚽"}
                 value="checkedH"
               />
             }
@@ -348,7 +338,12 @@ class AddPlaceForm extends Component {
           {this.state.isUploading && (
             <CircularProgress className={classes.progress} />
           )}
-          <GridList cellHeight={160} className={classes.gridList} cols={3}>
+          <GridList
+            cellHeight={160}
+            className={classes.gridList}
+            cols={3}
+            style={{ marginTop: "10px" }}
+          >
             {values.images.filter(Boolean).map(
               img =>
                 img && (

@@ -23,9 +23,9 @@ class Tutorial extends Component {
         <DialogTitle>🏕 Welcome to Wildspot!</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Wildspot is a crowdsourced map of best wild places where you can
-            setup up your tent. <br /> <br /> Discover picturesque spots and
-            help others find them too!
+            Wildspot is a crowdsourced map 🗺 of best wild places where you can
+            setup up your tent 🏕. <br /> <br /> Discover picturesque spots ⛰ and
+            help others find 🕵️‍ them too! <br /> <br /> Have fun! 🙌
           </DialogContentText>
         </DialogContent>
       </Dialog>

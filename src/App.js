@@ -223,8 +223,9 @@ class App extends React.Component {
           onCloseForm={this.onCancelAdding}
         />
 
+        {!this.state.isMapLoading && <Tutorial />}
+
         <Snackbar text={this.state.notificationText} />
-        <Tutorial />
       </React.Fragment>
     );
   }
