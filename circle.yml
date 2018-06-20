@@ -20,3 +20,19 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
         
       - run: yarn deploy
+
+  invalidate:
+    working_directory: ~/repo
+    docker:
+      - image: my-awscli-image:1.0
+    steps:
+      - run: aws cloudfront create-invalidation --distribution-id E2QGJ6HQUFY5DY --paths /
+
+workflows:
+  version: 2
+  deploy_and_invalidate:
+    jobs:
+      - build
+      - invalidate:
+          requires:
+            - build

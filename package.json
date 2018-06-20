@@ -25,7 +25,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "deploy": "yarn build && s3-website deploy && yarn invalidate-deploy",
+    "deploy": "yarn build && s3-website deploy",
     "invalidate-deploy": "aws cloudfront create-invalidation --distribution-id E2QGJ6HQUFY5DY --paths /"
   },
   "devDependencies": {
