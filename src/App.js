@@ -258,7 +258,7 @@ class App extends React.Component {
     );
 
   render() {
-    const { selectedPlace, isShowingAddForm, currentCenter } = this.state;
+    const { isShowingAddForm, currentCenter } = this.state;
 
     return (
       <React.Fragment>
