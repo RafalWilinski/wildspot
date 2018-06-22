@@ -2,6 +2,9 @@ import React from "react";
 import { Feature, Layer, Cluster, Marker } from "react-mapbox-gl";
 import styled from "styled-components";
 import throttle from "lodash.throttle";
+import Button from "@material-ui/core/Button";
+import AddIcon from "@material-ui/icons/Add";
+import LocationSearching from "@material-ui/icons/LocationSearching";
 
 import Snackbar from "./components/Snackbar";
 import loadingTexts from "./consts/loadingTexts";
@@ -13,6 +16,7 @@ import Cover from "./components/Cover";
 import PlaceDetailsPopup from "./components/PlaceDetailsPopup";
 import PlaceDetailsModal from "./components/PlaceDetailsModal";
 import Tutorial from "./components/Tutorial";
+import BottomMenuContainer from "./components/BottomMenuContainer";
 
 const containerStyle = {
   height: "100vh",
@@ -88,6 +92,10 @@ class App extends React.Component {
         }),
       200,
     );
+
+    this.posWatcher = navigator.geolocation.watchPosition(
+      this.onPositionChange,
+    );
   }
 
   componentDidMount() {
@@ -120,6 +128,15 @@ class App extends React.Component {
     this.firebaseRef.off("value", this.firebaseCallback);
   }
 
+  onPositionChange = pos => {
+    var lat = pos.coords.latitude;
+    var lon = pos.coords.longitude;
+
+    this.setState({
+      myPosition: [lon, lat],
+    });
+  };
+
   onAddingPlace = () => {
     this.setState({
       isShowingAddCover: true,
@@ -127,6 +144,12 @@ class App extends React.Component {
         entity: { features: {}, coordinates: this.state.currentCenter },
       },
       isAdding: false,
+    });
+  };
+
+  onGoToMyLocation = () => {
+    this.setState({
+      currentCenter: this.state.myPosition,
     });
   };
 
@@ -259,10 +282,21 @@ class App extends React.Component {
       </Layer>
     );
 
+  renderMyPosition = () => (
+    <Layer
+      type="circle"
+      paint={{
+        "circle-radius": 10,
+        "circle-color": "#2176ff",
+        "circle-opacity": 0.8,
+      }}
+    >
+      <Marker coordinates={this.state.myPosition} />
+    </Layer>
+  );
+
   render() {
     const { isShowingAddForm, currentCenter } = this.state;
-
-    console.log(this.state.selectedPlace);
 
     return (
       <React.Fragment>
@@ -279,7 +313,23 @@ class App extends React.Component {
           {this.renderCampsites()}
           {this.renderPlaceDetails()}
           {this.renderAddFeature()}
+          {this.renderMyPosition()}
         </Map>
+
+        {!this.state.isAdding && (
+          <BottomMenuContainer flexFlow="row-reverse">
+            <Button onClick={this.onAddingPlace} variant="fab" color="primary">
+              <AddIcon />
+            </Button>
+            <Button
+              onClick={this.onGoToMyLocation}
+              variant="fab"
+              color="secondary"
+            >
+              <LocationSearching />
+            </Button>
+          </BottomMenuContainer>
+        )}
 
         {this.renderCover()}
         {this.renderPlaceDetailsModal()}

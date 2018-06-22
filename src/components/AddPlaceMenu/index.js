@@ -3,7 +3,6 @@ import classNames from "classnames";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
-import AddIcon from "@material-ui/icons/Add";
 import Save from "@material-ui/icons/Save";
 import BottomMenuContainer from "../BottomMenuContainer";
 
@@ -20,7 +19,7 @@ const styles = theme => ({
 });
 
 const AddPlaceMenu = props =>
-  props.isAdding ? (
+  props.isAdding && (
     <BottomMenuContainer flexFlow="column">
       <Button
         color="primary"
@@ -44,12 +43,6 @@ const AddPlaceMenu = props =>
         size="large"
       >
         Cancel
-      </Button>
-    </BottomMenuContainer>
-  ) : (
-    <BottomMenuContainer flexFlow="row-reverse">
-      <Button onClick={props.onAddingPlace} variant="fab" color="primary">
-        <AddIcon />
       </Button>
     </BottomMenuContainer>
   );
