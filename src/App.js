@@ -1,14 +1,12 @@
 import React from "react";
-import { Feature, Layer, Cluster, Marker } from "react-mapbox-gl";
+import { Feature, Layer } from "react-mapbox-gl";
 import styled from "styled-components";
 import throttle from "lodash.throttle";
-import Button from "@material-ui/core/Button";
-import AddIcon from "@material-ui/icons/Add";
-import LocationSearching from "@material-ui/icons/LocationSearching";
 
+import withMyPosition from "./enhancers/withMyPosition";
+import withCampsitesCluster from "./enhancers/withCampsitesCluster";
 import Snackbar from "./components/Snackbar";
 import loadingTexts from "./consts/loadingTexts";
-import firebase from "./firebase";
 import Map from "./mapbox";
 import AddPlaceForm from "./components/AddPlaceForm/container";
 import AddPlaceMenu from "./components/AddPlaceMenu";
@@ -16,34 +14,15 @@ import Cover from "./components/Cover";
 import PlaceDetailsPopup from "./components/PlaceDetailsPopup";
 import PlaceDetailsModal from "./components/PlaceDetailsModal";
 import Tutorial from "./components/Tutorial";
-import BottomMenuContainer from "./components/BottomMenuContainer";
+import BottomMenu from "./components/BottomMenu";
 
 const containerStyle = {
   height: "100vh",
   width: "100vw",
 };
 
-const styles = {
-  clusterMarker: {
-    width: 30,
-    height: 30,
-    borderRadius: "50%",
-    backgroundColor: "#51D5A0",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    color: "white",
-    border: "2px solid #56C498",
-    cursor: "pointer",
-  },
-};
 const CoverText = styled.p`
   line-height: 1.15;
-`;
-
-const Pin = styled.span`
-  margin-top: 5px;
-  font-size: 2em;
 `;
 
 class App extends React.Component {
@@ -54,7 +33,6 @@ class App extends React.Component {
       isMapLoading: true,
       isPlaceDetailsModalOpen: false,
       isAdding: false,
-      isFirebaseDataLoading: true,
       isShowingAddCover: false,
       isShowingAddForm: false,
       loadingText: "",
@@ -64,24 +42,8 @@ class App extends React.Component {
         -0.2401928739864161,
         51.52677435907751,
       ],
-      selectedPlace: {
-        entity: {
-          features: {},
-          coordinates: [-0.2401928739864161, 51.52677435907751],
-        },
-      },
     };
   }
-
-  clusterMarker = (coordinates, pointCount, getLeaves) => (
-    <Marker
-      key={coordinates.toString()}
-      coordinates={coordinates}
-      style={styles.clusterMarker}
-    >
-      <div>{pointCount}</div>
-    </Marker>
-  );
 
   componentWillMount() {
     this.loadingTextChangeInterval = setInterval(
@@ -92,64 +54,29 @@ class App extends React.Component {
         }),
       200,
     );
-
-    this.posWatcher = navigator.geolocation.watchPosition(
-      this.onPositionChange,
-    );
   }
 
-  componentDidMount() {
-    this.firebaseRef = firebase.database().ref("/spots");
-    this.firebaseCallback = this.firebaseRef.on("value", snap => {
-      const json = snap.val();
-
-      Object.keys(json).map(key =>
-        this.setState({
-          places: [...this.state.places, json[key]],
-          isFirebaseDataLoading: false,
-        }),
-      );
-
-      if (window.location.pathname) {
-        const selectedPlace = this.state.places.filter(
-          place => `/${place.id}` === window.location.pathname,
-        )[0];
-
-        if (selectedPlace) {
-          this.setState({
-            selectedPlace,
-          });
-        }
-      }
-    });
+  componentWillReceiveProps(nextProps) {
+    if (
+      nextProps.currentCenter &&
+      nextProps.currentCenter[0] !== this.state.currentCenter[0]
+    ) {
+      this.setState({
+        currentCenter: nextProps.currentCenter,
+      });
+    }
   }
-
-  componentWillUnmount() {
-    this.firebaseRef.off("value", this.firebaseCallback);
-  }
-
-  onPositionChange = pos => {
-    var lat = pos.coords.latitude;
-    var lon = pos.coords.longitude;
-
-    this.setState({
-      myPosition: [lon, lat],
-    });
-  };
 
   onAddingPlace = () => {
     this.setState({
       isShowingAddCover: true,
-      selectedPlace: {
-        entity: { features: {}, coordinates: this.state.currentCenter },
-      },
       isAdding: false,
     });
   };
 
   onGoToMyLocation = () => {
     this.setState({
-      currentCenter: this.state.myPosition,
+      currentCenter: this.props.myPosition,
     });
   };
 
@@ -163,13 +90,6 @@ class App extends React.Component {
     this.setState({
       isShowingAddCover: false,
       isAdding: true,
-    });
-  };
-
-  onMarkClick = selectedPlace => {
-    this.setState({
-      selectedPlace,
-      currentCenter: selectedPlace.entity.coordinates,
     });
   };
 
@@ -209,27 +129,9 @@ class App extends React.Component {
   renderDataLoadingSpinner = () =>
     this.state.isMapLoading && <Cover>{this.state.loadingText}</Cover>;
 
-  renderCampsites = () => (
-    <Cluster ClusterMarkerFactory={this.clusterMarker}>
-      {this.state.places.map((place, key) => (
-        <Marker
-          key={key}
-          style={styles.marker}
-          coordinates={place.entity.coordinates}
-          data-feature={place}
-          onClick={() => this.onMarkClick(place)}
-        >
-          <Pin role="img" aria-label={place.entity.name}>
-            {/* // eslint-disable-next-line */}
-            ⛺️
-          </Pin>
-        </Marker>
-      ))}
-    </Cluster>
-  );
-
   renderPlaceDetails = () => {
-    const { selectedPlace, currentCenter } = this.state;
+    const { currentCenter } = this.state;
+    const { selectedPlace } = this.props;
 
     return (
       selectedPlace.entity &&
@@ -254,20 +156,6 @@ class App extends React.Component {
       </Cover>
     );
 
-  renderPlaceDetailsModal = () => (
-    <PlaceDetailsModal
-      onChangeNotificationText={this.onChangeNotificationText}
-      isOpen={this.state.isPlaceDetailsModalOpen}
-      selectedPlace={this.state.selectedPlace}
-      onClose={e => {
-        this.setState({ isPlaceDetailsModalOpen: false });
-
-        e.preventDefault();
-        e.stopPropagation();
-      }}
-    />
-  );
-
   renderAddFeature = () =>
     this.state.isAdding && (
       <Layer
@@ -282,26 +170,20 @@ class App extends React.Component {
       </Layer>
     );
 
-  renderMyPosition = () => (
-    <Layer
-      type="circle"
-      paint={{
-        "circle-radius": 10,
-        "circle-color": "#2176ff",
-        "circle-opacity": 0.8,
-      }}
-    >
-      <Marker coordinates={this.state.myPosition} />
-    </Layer>
-  );
-
   render() {
-    const { isShowingAddForm, currentCenter } = this.state;
+    const {
+      isAdding,
+      isShowingAddForm,
+      isMapLoading,
+      isPlaceDetailsModalOpen,
+      currentCenter,
+      notificationText,
+    } = this.state;
+    const { selectedPlace, campsitesCluster, myPositionMarker } = this.props;
 
     return (
       <React.Fragment>
         {this.renderDataLoadingSpinner()}
-
         <Map
           style="mapbox://styles/mapbox/outdoors-v9" // eslint-disable-line react/style-prop-object
           containerStyle={containerStyle}
@@ -310,30 +192,29 @@ class App extends React.Component {
           center={currentCenter}
           onStyleLoad={this.onStyleLoad}
         >
-          {this.renderCampsites()}
+          {myPositionMarker()}
+          {campsitesCluster}
           {this.renderPlaceDetails()}
           {this.renderAddFeature()}
-          {this.renderMyPosition()}
         </Map>
 
-        {!this.state.isAdding && (
-          <BottomMenuContainer flexFlow="row-reverse">
-            <Button onClick={this.onAddingPlace} variant="fab" color="primary">
-              <AddIcon />
-            </Button>
-            <Button
-              onClick={this.onGoToMyLocation}
-              variant="fab"
-              color="secondary"
-            >
-              <LocationSearching />
-            </Button>
-          </BottomMenuContainer>
-        )}
-
+        <BottomMenu
+          onGoToMyLocation={this.onGoToMyLocation}
+          onAddingPlace={this.onAddingPlace}
+          isAdding={isAdding}
+        />
         {this.renderCover()}
-        {this.renderPlaceDetailsModal()}
+        <PlaceDetailsModal
+          onChangeNotificationText={this.onChangeNotificationText}
+          isOpen={isPlaceDetailsModalOpen}
+          selectedPlace={selectedPlace}
+          onClose={e => {
+            this.setState({ isPlaceDetailsModalOpen: false });
 
+            e.preventDefault();
+            e.stopPropagation();
+          }}
+        />
         <AddPlaceMenu
           isAdding={this.state.isAdding}
           classes={this.props.classes}
@@ -341,19 +222,16 @@ class App extends React.Component {
           onAddingPlace={this.onAddingPlace}
           onCancelAdding={this.onCancelAdding}
         />
-
         <AddPlaceForm
           isOpen={isShowingAddForm}
           coordinates={currentCenter}
           onCloseForm={this.onCancelAdding}
         />
-
-        {!this.state.isMapLoading && <Tutorial />}
-
-        <Snackbar text={this.state.notificationText} />
+        {!isMapLoading && <Tutorial />}
+        <Snackbar text={notificationText} />
       </React.Fragment>
     );
   }
 }
 
-export default App;
+export default withMyPosition(withCampsitesCluster(App));
