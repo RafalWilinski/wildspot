@@ -26,6 +26,8 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import DeleteIcon from "@material-ui/icons/Delete";
 import withMobileDialog from "@material-ui/core/withMobileDialog";
 import Slide from "@material-ui/core/Slide";
+
+import Error from "../Error";
 import firebase from "../../firebase";
 
 function Transition(props) {
@@ -116,6 +118,7 @@ class AddPlaceForm extends Component {
       isSubmitting,
       classes,
       fullScreen,
+      errors,
     } = this.props;
 
     return (
@@ -142,6 +145,7 @@ class AddPlaceForm extends Component {
             name="name"
             fullWidth
           />
+          {errors.name && <Error>{errors.name}</Error>}
           <FormControl
             className={this.props.classes.formControl}
             fullWidth
@@ -162,6 +166,7 @@ class AddPlaceForm extends Component {
             <FormHelperText>
               Some grounds are not so suitable for tents
             </FormHelperText>
+            {errors.groundwork && <Error>{errors.groundwork}</Error>}
           </FormControl>
           <StyledFormControlLabel
             control={

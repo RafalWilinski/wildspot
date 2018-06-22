@@ -123,7 +123,9 @@ class App extends React.Component {
   onAddingPlace = () => {
     this.setState({
       isShowingAddCover: true,
-      selectedPlace: { entity: {} },
+      selectedPlace: {
+        entity: { features: {}, coordinates: this.state.currentCenter },
+      },
       isAdding: false,
     });
   };
@@ -259,6 +261,8 @@ class App extends React.Component {
 
   render() {
     const { isShowingAddForm, currentCenter } = this.state;
+
+    console.log(this.state.selectedPlace);
 
     return (
       <React.Fragment>

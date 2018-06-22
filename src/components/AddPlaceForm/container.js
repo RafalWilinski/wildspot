@@ -1,4 +1,5 @@
 import { withFormik } from "formik";
+import * as Yup from "yup";
 
 import spotFactory from "../../templates/spot";
 import firebase from "../../firebase";
@@ -13,14 +14,12 @@ const AddPlaceForm = withFormik({
     features: { empty: true },
     coordinates: props.coordinates,
   }),
-  validate: (values, props) => {
-    const errors = {};
-    if (!values.name) {
-      errors.name = "Required";
-    }
-
-    return errors;
-  },
+  validationSchema: Yup.object().shape({
+    name: Yup.string()
+      .required("Required 👮‍")
+      .min(3, "At least 3 characters 😠"),
+    groundwork: Yup.string().required("Required 👮‍"),
+  }),
   handleSubmit: (values, { props, setSubmitting, setError }) => {
     setSubmitting(true);
 
