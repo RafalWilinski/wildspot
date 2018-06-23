@@ -38,10 +38,10 @@ class App extends React.Component {
       loadingText: "",
       notificationText: "",
       places: [],
-      currentCenter: (localStorage.getItem("lastPos") || "").split(",") || [
-        -0.2401928739864161,
-        51.52677435907751
-      ]
+      currentCenter: (
+        localStorage.getItem("lastPos") ||
+        "-0.2401928739864161,51.52677435907751"
+      ).split(",") || [-0.2401928739864161, 51.52677435907751]
     };
   }
 
