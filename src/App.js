@@ -18,7 +18,7 @@ import BottomMenu from "./components/BottomMenu";
 
 const containerStyle = {
   height: "100vh",
-  width: "100vw",
+  width: "100vw"
 };
 
 const CoverText = styled.p`
@@ -38,10 +38,10 @@ class App extends React.Component {
       loadingText: "",
       notificationText: "",
       places: [],
-      currentCenter: localStorage.getItem("lastPos").split(",") || [
+      currentCenter: (localStorage.getItem("lastPos") || "").split(",") || [
         -0.2401928739864161,
-        51.52677435907751,
-      ],
+        51.52677435907751
+      ]
     };
   }
 
@@ -50,9 +50,9 @@ class App extends React.Component {
       () =>
         this.setState({
           loadingText:
-            loadingTexts[Math.floor(Math.random() * loadingTexts.length)],
+            loadingTexts[Math.floor(Math.random() * loadingTexts.length)]
         }),
-      200,
+      200
     );
   }
 
@@ -62,7 +62,7 @@ class App extends React.Component {
       nextProps.currentCenter[0] !== this.state.currentCenter[0]
     ) {
       this.setState({
-        currentCenter: nextProps.currentCenter,
+        currentCenter: nextProps.currentCenter
       });
     }
   }
@@ -70,44 +70,44 @@ class App extends React.Component {
   onAddingPlace = () => {
     this.setState({
       isShowingAddCover: true,
-      isAdding: false,
+      isAdding: false
     });
   };
 
   onGoToMyLocation = () => {
     this.setState({
-      currentCenter: this.props.myPosition,
+      currentCenter: this.props.myPosition
     });
   };
 
   onChangeNotificationText = notificationText => {
     this.setState({
-      notificationText,
+      notificationText
     });
   };
 
   onCloseCover = () => {
     this.setState({
       isShowingAddCover: false,
-      isAdding: true,
+      isAdding: true
     });
   };
 
   onMove = e => {
     this.setState({
-      currentCenter: [e.transform._center.lng, e.transform._center.lat],
+      currentCenter: [e.transform._center.lng, e.transform._center.lat]
     });
 
     localStorage.setItem("lastPos", [
       e.transform._center.lng,
-      e.transform._center.lat,
+      e.transform._center.lat
     ]);
   };
 
   onConfirmLocation = () => {
     this.setState({
       isShowingAddForm: true,
-      isAdding: false,
+      isAdding: false
     });
   };
 
@@ -115,7 +115,7 @@ class App extends React.Component {
     this.setState({
       isAdding: false,
       isShowingAddCover: false,
-      isShowingAddForm: false,
+      isShowingAddForm: false
     });
   };
 
@@ -141,7 +141,7 @@ class App extends React.Component {
           selectedPlace={selectedPlace}
           onPlaceDetailsModalOpen={() =>
             this.setState({
-              isPlaceDetailsModalOpen: true,
+              isPlaceDetailsModalOpen: true
             })
           }
         />
@@ -163,7 +163,7 @@ class App extends React.Component {
         paint={{
           "circle-radius": 15,
           "circle-color": "#E54E52",
-          "circle-opacity": 0.8,
+          "circle-opacity": 0.8
         }}
       >
         <Feature coordinates={this.state.currentCenter} />
@@ -177,7 +177,7 @@ class App extends React.Component {
       isMapLoading,
       isPlaceDetailsModalOpen,
       currentCenter,
-      notificationText,
+      notificationText
     } = this.state;
     const { selectedPlace, campsitesCluster, myPositionMarker } = this.props;
 
