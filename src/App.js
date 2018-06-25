@@ -15,6 +15,7 @@ import PlaceDetailsPopup from "./components/PlaceDetailsPopup";
 import PlaceDetailsModal from "./components/PlaceDetailsModal";
 import Tutorial from "./components/Tutorial";
 import BottomMenu from "./components/BottomMenu";
+import PlacesSearch from "./components/PlacesSearch";
 
 const containerStyle = {
   height: "100vh",
@@ -101,6 +102,12 @@ class App extends React.Component {
       e.transform._center.lng,
       e.transform._center.lat
     ]);
+  };
+
+  onChangeCurrentCenter = currentCenter => {
+    this.setState({
+      currentCenter
+    });
   };
 
   onConfirmLocation = () => {
@@ -198,6 +205,7 @@ class App extends React.Component {
           {this.renderPlaceDetails()}
           {this.renderAddFeature()}
         </Map>
+        <PlacesSearch onLocationChanged={this.onChangeCurrentCenter} />
 
         <BottomMenu
           onGoToMyLocation={this.onGoToMyLocation}
