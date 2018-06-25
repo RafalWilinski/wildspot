@@ -24,6 +24,10 @@ const Title = styled.div`
   cursor: pointer;
 `;
 
+const Image = styled.img`
+  height: 140px;
+`;
+
 class PlaceDetailsPopup extends React.Component {
   render() {
     const { selectedPlace } = this.props;
@@ -75,6 +79,12 @@ class PlaceDetailsPopup extends React.Component {
             {selectedPlace.entity.features.notCrowded && "👨‍👨‍👧‍👧"}
             {selectedPlace.entity.features.grocery && "🛒"}
           </Row>
+          {selectedPlace.entity.images &&
+            selectedPlace.entity.images.length > 0 && (
+              <Row>
+                <Image src={selectedPlace.entity.images[0]} />
+              </Row>
+            )}
         </StyledPopup>
       </Popup>
     );
