@@ -10,7 +10,12 @@ export default ({ isAdding, onAddingPlace, onGoToMyLocation }) =>
       <Button onClick={onAddingPlace} variant="fab" color="primary">
         <AddIcon />
       </Button>
-      <Button onClick={onGoToMyLocation} variant="fab" color="secondary">
+      <Button
+        onClick={onGoToMyLocation}
+        variant="fab"
+        color="secondary"
+        style={{ marginRight: "10px" }}
+      >
         <LocationSearching />
       </Button>
     </BottomMenuContainer>
