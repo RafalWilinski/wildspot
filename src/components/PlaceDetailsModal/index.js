@@ -220,6 +220,7 @@ class PlaceDetailsModal extends Component {
           TransitionComponent={Transition}
         >
           <img
+            alt="place"
             style={{ width: "100%" }}
             onClick={this.onZoomClose}
             src={this.state.image}
