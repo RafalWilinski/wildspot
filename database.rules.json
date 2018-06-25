@@ -1,6 +1,42 @@
 {
   "rules": {
     ".read": true,
-    ".write": true
+    "spots": {
+      ".write": "auth != null",
+      "$spotId": {
+        "votesCount": {
+          ".validate":
+            "newData.val() == 0 || (newData.isNumber() && newData.val() % 1 === 0.0 && newData.val() - data.val() <= 1)"
+        },
+        "isPublic": {
+          ".validate": "newData.isBoolean()"
+        },
+        "entity": {
+          ".indexOn": ["lat", "lng"],
+          "name": {
+            ".validate": "newData.isString() && newData.val().length < 60"
+          },
+          "description": {
+            ".validate": "newData.isString() && newData.val().length < 500"
+          },
+          "groundwork": {
+            ".validate": "newData.isString() && newData.val().length < 12"
+          },
+          "lat": {
+            ".validate": "newData.isNumber()"
+          },
+          "lng": {
+            ".validate": "newData.isNumber()"
+          }
+        }
+      }
+    },
+    "users": {
+      ".read": true,
+      ".write": "auth != null ",
+      "$user_id": {
+        ".write": "$user_id === auth.uid"
+      }
+    }
   }
 }
