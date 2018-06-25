@@ -192,6 +192,7 @@ class App extends React.Component {
           onMoveEnd={this.onMove}
           onMove={throttle(this.onMove, 100)}
           center={currentCenter}
+          zoom={[2]}
           onStyleLoad={this.onStyleLoad}
         >
           {myPositionMarker()}
