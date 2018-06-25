@@ -1,6 +1,7 @@
 export default (id, entity) => ({
   id,
-  votes: 0,
+  votes: {},
+  votesCount: 0,
   isPublic: false,
-  entity,
+  entity
 });

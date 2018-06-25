@@ -15,8 +15,8 @@ const styles = {
     alignItems: "center",
     color: "white",
     border: "2px solid #56C498",
-    cursor: "pointer",
-  },
+    cursor: "pointer"
+  }
 };
 
 const Pin = styled.span`
@@ -28,34 +28,39 @@ const withCampsitesCluster = WrappedComponent =>
   class extends React.Component {
     state = {
       places: [],
-      selectedPlace: {
-        entity: {
-          features: {},
-          coordinates: [-0.2401928739864161, 51.52677435907751],
-        },
-      },
+      selectedPlaceId: -1
     };
 
     componentDidMount() {
       this.firebaseRef = firebase.database().ref("/spots");
+
       this.firebaseCallback = this.firebaseRef.on("value", snap => {
         const json = snap.val();
 
-        Object.keys(json).map(key =>
-          this.setState({
-            places: [...this.state.places, json[key]],
-          }),
-        );
-
-        if (window.location.pathname) {
-          const selectedPlace = this.state.places.filter(
-            place => `/${place.id}` === window.location.pathname,
-          )[0];
-
-          if (selectedPlace) {
+        if (json) {
+          Object.keys(json).map(key =>
             this.setState({
-              selectedPlace,
-            });
+              places: [
+                ...this.state.places.filter(place => place.id !== key),
+                json[key]
+              ]
+            })
+          );
+
+          if (window.location.pathname) {
+            const selectedPlaceId = window.location.pathname.slice(1);
+            const selectedPlace = this.state.places.filter(
+              ({ id }) => id === selectedPlaceId
+            )[0];
+
+            if (selectedPlace) {
+              if (selectedPlaceId) {
+                this.setState({
+                  selectedPlaceId,
+                  currentCenter: selectedPlace.entity.coordinates
+                });
+              }
+            }
           }
         }
       });
@@ -77,13 +82,16 @@ const withCampsitesCluster = WrappedComponent =>
 
     onMarkClick = selectedPlace => {
       this.setState({
-        selectedPlace,
-        currentCenter: selectedPlace.entity.coordinates,
+        selectedPlaceId: selectedPlace.id,
+        currentCenter: selectedPlace.entity.coordinates
       });
     };
 
+    getSelectedPlace = id =>
+      this.state.places.filter(place => place.id === id)[0];
+
     render() {
-      const { selectedPlace, places } = this.state;
+      const { selectedPlaceId, places } = this.state;
 
       return (
         <WrappedComponent
@@ -105,8 +113,9 @@ const withCampsitesCluster = WrappedComponent =>
               ))}
             </Cluster>
           }
-          selectedPlace={selectedPlace}
+          selectedPlace={this.getSelectedPlace(selectedPlaceId)}
           currentCenter={this.state.currentCenter}
+          firebaseRef={this.firebaseRef}
           {...this.props}
         />
       );

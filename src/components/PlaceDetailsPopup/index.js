@@ -32,13 +32,16 @@ class PlaceDetailsPopup extends React.Component {
       <Popup
         key={selectedPlace.id}
         coordinates={selectedPlace.entity.coordinates}
+        offset={{
+          bottom: [0, -25]
+        }}
       >
         <StyledPopup
           onClick={() => {
             window.history.pushState(
               { pageTitle: selectedPlace.entity.name },
               "",
-              `/${selectedPlace.id}`,
+              `/${selectedPlace.id}`
             );
 
             this.props.onPlaceDetailsModalOpen();
@@ -51,10 +54,10 @@ class PlaceDetailsPopup extends React.Component {
                 fontSize: 16,
                 marginLeft: "25px",
                 marginRight: "5px",
-                marginTop: "2px",
+                marginTop: "2px"
               }}
             />
-            <div>{selectedPlace.votes}</div>
+            <div>{selectedPlace.votesCount || 0}</div>
           </Row>
           <Row>
             {selectedPlace.entity.features.quiet && "🤫"}

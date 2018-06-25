@@ -21,21 +21,23 @@ import { IconButton } from "@material-ui/core";
 import Slide from "@material-ui/core/Slide";
 import withMobileDialog from "@material-ui/core/withMobileDialog";
 
+import withVoting from "../../enhancers/withVoting";
+
 const styles = theme => ({
   formControl: {
     margin: theme.spacing.unit,
-    minWidth: 120,
+    minWidth: 120
   },
   textField: {
     marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginRight: theme.spacing.unit
   },
   button: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing.unit
   },
   rightIcon: {
-    marginLeft: theme.spacing.unit,
-  },
+    marginLeft: theme.spacing.unit
+  }
 });
 
 const Groundwork = styled.div`
@@ -71,7 +73,7 @@ class PlaceDetailsModal extends Component {
       fullScreen,
       selectedPlace,
       onClose,
-      onChangeNotificationText,
+      onChangeNotificationText
     } = this.props;
 
     return (
@@ -183,9 +185,9 @@ class PlaceDetailsModal extends Component {
               <Link />
             </IconButton>
           </CopyToClipboard>
-          <IconButton>
-            <ThumbUp />
-            <ThumbsUpCount>{selectedPlace.votes}</ThumbsUpCount>
+          <IconButton onClick={this.props.onVote}>
+            <ThumbUp color={this.props.isVoted ? "primary" : "disabled"} />
+            <ThumbsUpCount>{selectedPlace.votesCount || 0}</ThumbsUpCount>
           </IconButton>
         </DialogActions>
       </Dialog>
@@ -193,4 +195,6 @@ class PlaceDetailsModal extends Component {
   }
 }
 
-export default withMobileDialog()(withStyles(styles)(PlaceDetailsModal));
+export default withMobileDialog()(
+  withStyles(styles)(withVoting(PlaceDetailsModal))
+);

@@ -134,9 +134,11 @@ class App extends React.Component {
     const { selectedPlace } = this.props;
 
     return (
+      selectedPlace &&
       selectedPlace.entity &&
       selectedPlace.entity.name &&
-      currentCenter[0] === selectedPlace.entity.coordinates[0] && (
+      Math.abs(currentCenter[0] - selectedPlace.entity.coordinates[0]) <
+        0.000001 && (
         <PlaceDetailsPopup
           selectedPlace={selectedPlace}
           onPlaceDetailsModalOpen={() =>
@@ -204,17 +206,20 @@ class App extends React.Component {
           isAdding={isAdding}
         />
         {this.renderCover()}
-        <PlaceDetailsModal
-          onChangeNotificationText={this.onChangeNotificationText}
-          isOpen={isPlaceDetailsModalOpen}
-          selectedPlace={selectedPlace}
-          onClose={e => {
-            this.setState({ isPlaceDetailsModalOpen: false });
+        {selectedPlace && (
+          <PlaceDetailsModal
+            onChangeNotificationText={this.onChangeNotificationText}
+            isOpen={isPlaceDetailsModalOpen}
+            selectedPlace={selectedPlace}
+            onClose={e => {
+              this.setState({ isPlaceDetailsModalOpen: false });
 
-            e.preventDefault();
-            e.stopPropagation();
-          }}
-        />
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+            firebaseRef={this.props.firebaseRef}
+          />
+        )}
         <AddPlaceMenu
           isAdding={this.state.isAdding}
           classes={this.props.classes}
