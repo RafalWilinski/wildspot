@@ -112,7 +112,7 @@ const TopContainer = styled.div`
   padding: 10px 10px 15px;
   background-color: ${props =>
     props.visible ? "rgba(255, 255, 255, 0.75)" : "transparent"};
-  z-index: 100000;
+  z-index: 999;
 `;
 
 class IntegrationAutosuggest extends React.Component {

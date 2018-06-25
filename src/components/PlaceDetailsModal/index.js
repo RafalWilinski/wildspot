@@ -61,11 +61,30 @@ const Emoji = styled.span`
   margin: 0;
 `;
 
+const Image = styled.img`
+  width: 100%;
+  cursor: zoom-in;
+`;
+
 function Transition(props) {
   return <Slide direction="up" {...props} />;
 }
 
 class PlaceDetailsModal extends Component {
+  state = {
+    image: null
+  };
+
+  onZoomImage = image => {
+    this.setState({ image });
+  };
+
+  onZoomClose = () => {
+    this.setState({
+      image: null
+    });
+  };
+
   render() {
     const {
       isOpen,
@@ -160,7 +179,11 @@ class PlaceDetailsModal extends Component {
           >
             {(selectedPlace.entity.images || []).filter(Boolean).map(img => (
               <GridListTile key={img} cols={1}>
-                <img src={img} alt={selectedPlace.entity.name} />
+                <Image
+                  src={img}
+                  alt={selectedPlace.entity.name}
+                  onClick={() => this.onZoomImage(img)}
+                />
               </GridListTile>
             ))}
           </GridList>
@@ -190,6 +213,18 @@ class PlaceDetailsModal extends Component {
             <ThumbsUpCount>{selectedPlace.votesCount || 0}</ThumbsUpCount>
           </IconButton>
         </DialogActions>
+        <Dialog
+          onClose={this.onZoomClose}
+          fullScreen
+          open={this.state.image}
+          TransitionComponent={Transition}
+        >
+          <img
+            style={{ width: "100%" }}
+            onClick={this.onZoomClose}
+            src={this.state.image}
+          />
+        </Dialog>
       </Dialog>
     );
   }
