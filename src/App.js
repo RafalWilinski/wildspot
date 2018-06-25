@@ -39,9 +39,8 @@ class App extends React.Component {
       notificationText: "",
       places: [],
       currentCenter: (
-        localStorage.getItem("lastPos") ||
-        "-0.2401928739864161,51.52677435907751"
-      ).split(",") || [-0.2401928739864161, 51.52677435907751]
+        localStorage.getItem("lastPos") || "15.629874169513641,43.7947716883578"
+      ).split(",") || [15.629874169513641, 43.7947716883578]
     };
   }
 
@@ -190,9 +189,8 @@ class App extends React.Component {
           style="mapbox://styles/mapbox/outdoors-v9" // eslint-disable-line react/style-prop-object
           containerStyle={containerStyle}
           onMoveEnd={this.onMove}
-          onMove={throttle(this.onMove, 100)}
+          onMove={throttle(this.onMove, 250)}
           center={currentCenter}
-          zoom={[2]}
           onStyleLoad={this.onStyleLoad}
         >
           {myPositionMarker()}
