@@ -1,6 +1,8 @@
 ![Wildspot](/assets/logo/logo.png?raw=true "Wildspot.co")
 
-Repo for [wildspot.co] project.
+Repo for [wildspot.co](https://wildspot.co) project.
+
+[![CircleCI](https://circleci.com/gh/RafalWilinski/wildspot/tree/master.svg?style=shield)](https://circleci.com/gh/RafalWilinski/wildspot/tree/master)
 
 ### Development
 
@@ -20,4 +22,4 @@ yarn deploy
 
 ### Feature requests and bugs
 
-Please submit any feature requests and bugs in [Issues]() section or using [Trello Board](https://trello.com/b/Q7onKpPF/wildspotco-features).
+Please submit any feature requests and bugs in [Issues](https://github.com/RafalWilinski/wildspot/issues) section or using [Trello Board](https://trello.com/b/Q7onKpPF/wildspotco-features).
