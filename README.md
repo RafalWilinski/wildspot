@@ -1,8 +1,8 @@
 ![Wildspot](/assets/logo/logo.png?raw=true "Wildspot.co")
 
-Repo for [wildspot.co](https://wildspot.co) project.
-
 [![CircleCI](https://circleci.com/gh/RafalWilinski/wildspot/tree/master.svg?style=shield)](https://circleci.com/gh/RafalWilinski/wildspot/tree/master)
+
+Repo for [wildspot.co](https://wildspot.co) project.
 
 ### Development
 
