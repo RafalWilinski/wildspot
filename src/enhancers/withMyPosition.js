@@ -36,6 +36,7 @@ const withMyPosition = WrappedComponent =>
                 myPosition[0] && <Marker coordinates={myPosition} />}
             </Layer>
           )}
+          {...this.props}
         />
       );
     }

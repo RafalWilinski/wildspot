@@ -19,7 +19,7 @@ import PlacesSearch from "./components/PlacesSearch";
 
 const containerStyle = {
   height: "100vh",
-  width: "100vw"
+  width: "100vw",
 };
 
 const CoverText = styled.p`
@@ -39,9 +39,6 @@ class App extends React.Component {
       loadingText: "",
       notificationText: "",
       places: [],
-      currentCenter: (
-        localStorage.getItem("lastPos") || "15.629874169513641,43.7947716883578"
-      ).split(",") || [15.629874169513641, 43.7947716883578]
     };
   }
 
@@ -50,70 +47,52 @@ class App extends React.Component {
       () =>
         this.setState({
           loadingText:
-            loadingTexts[Math.floor(Math.random() * loadingTexts.length)]
+            loadingTexts[Math.floor(Math.random() * loadingTexts.length)],
         }),
-      200
+      200,
     );
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (
-      nextProps.currentCenter &&
-      nextProps.currentCenter[0] !== this.state.currentCenter[0]
-    ) {
-      this.setState({
-        currentCenter: nextProps.currentCenter
-      });
-    }
   }
 
   onAddingPlace = () => {
     this.setState({
       isShowingAddCover: true,
-      isAdding: false
+      isAdding: false,
     });
   };
 
   onGoToMyLocation = () => {
-    this.setState({
-      currentCenter: this.props.myPosition
-    });
+    this.props.onChangeCurrentCenter(this.props.myPosition);
   };
 
   onChangeNotificationText = notificationText => {
     this.setState({
-      notificationText
+      notificationText,
     });
   };
 
   onCloseCover = () => {
     this.setState({
       isShowingAddCover: false,
-      isAdding: true
+      isAdding: true,
     });
   };
 
   onMove = e => {
-    this.setState({
-      currentCenter: [e.transform._center.lng, e.transform._center.lat]
-    });
+    this.props.onChangeCurrentCenter([
+      e.transform._center.lng,
+      e.transform._center.lat,
+    ]);
 
     localStorage.setItem("lastPos", [
       e.transform._center.lng,
-      e.transform._center.lat
+      e.transform._center.lat,
     ]);
-  };
-
-  onChangeCurrentCenter = currentCenter => {
-    this.setState({
-      currentCenter
-    });
   };
 
   onConfirmLocation = () => {
     this.setState({
       isShowingAddForm: true,
-      isAdding: false
+      isAdding: false,
     });
   };
 
@@ -121,7 +100,7 @@ class App extends React.Component {
     this.setState({
       isAdding: false,
       isShowingAddCover: false,
-      isShowingAddForm: false
+      isShowingAddForm: false,
     });
   };
 
@@ -136,8 +115,7 @@ class App extends React.Component {
     this.state.isMapLoading && <Cover>{this.state.loadingText}</Cover>;
 
   renderPlaceDetails = () => {
-    const { currentCenter } = this.state;
-    const { selectedPlace } = this.props;
+    const { selectedPlace, currentCenter } = this.props;
 
     return (
       selectedPlace &&
@@ -149,7 +127,7 @@ class App extends React.Component {
           selectedPlace={selectedPlace}
           onPlaceDetailsModalOpen={() =>
             this.setState({
-              isPlaceDetailsModalOpen: true
+              isPlaceDetailsModalOpen: true,
             })
           }
         />
@@ -171,10 +149,10 @@ class App extends React.Component {
         paint={{
           "circle-radius": 15,
           "circle-color": "#E54E52",
-          "circle-opacity": 0.8
+          "circle-opacity": 0.8,
         }}
       >
-        <Feature coordinates={this.state.currentCenter} />
+        <Feature coordinates={this.props.currentCenter} />
       </Layer>
     );
 
@@ -184,10 +162,14 @@ class App extends React.Component {
       isShowingAddForm,
       isMapLoading,
       isPlaceDetailsModalOpen,
-      currentCenter,
-      notificationText
+      notificationText,
     } = this.state;
-    const { selectedPlace, campsitesCluster, myPositionMarker } = this.props;
+    const {
+      selectedPlace,
+      campsitesCluster,
+      myPositionMarker,
+      currentCenter,
+    } = this.props;
 
     return (
       <React.Fragment>
@@ -205,8 +187,7 @@ class App extends React.Component {
           {this.renderPlaceDetails()}
           {this.renderAddFeature()}
         </Map>
-        <PlacesSearch onLocationChanged={this.onChangeCurrentCenter} />
-
+        <PlacesSearch onLocationChanged={this.props.onChangeCurrentCenter} />
         <BottomMenu
           onGoToMyLocation={this.onGoToMyLocation}
           onAddingPlace={this.onAddingPlace}

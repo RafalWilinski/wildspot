@@ -15,8 +15,8 @@ const styles = {
     alignItems: "center",
     color: "white",
     border: "2px solid #56C498",
-    cursor: "pointer"
-  }
+    cursor: "pointer",
+  },
 };
 
 const Pin = styled.span`
@@ -28,7 +28,10 @@ const withCampsitesCluster = WrappedComponent =>
   class extends React.Component {
     state = {
       places: [],
-      selectedPlaceId: -1
+      selectedPlaceId: -1,
+      currentCenter: (
+        localStorage.getItem("lastPos") || "15.629874169513641,43.7947716883578"
+      ).split(",") || [15.629874169513641, 43.7947716883578],
     };
 
     componentDidMount() {
@@ -42,28 +45,38 @@ const withCampsitesCluster = WrappedComponent =>
             this.setState({
               places: [
                 ...this.state.places.filter(place => place.id !== key),
-                json[key]
-              ]
-            })
+                json[key],
+              ],
+            }),
           );
 
           if (window.location.pathname) {
             const selectedPlaceId = window.location.pathname.slice(1);
             const selectedPlace = this.state.places.filter(
-              ({ id }) => id === selectedPlaceId
+              ({ id }) => id === selectedPlaceId,
             )[0];
 
             if (selectedPlace) {
               if (selectedPlaceId) {
                 this.setState({
                   selectedPlaceId,
-                  currentCenter: selectedPlace.entity.coordinates
+                  currentCenter: selectedPlace.entity.coordinates,
                 });
               }
             }
           }
         }
       });
+
+      console.log(this.props.seoPlace);
+
+      if (this.props.seoPlace) {
+        setTimeout(() => {
+          this.setState({
+            currentCenter: this.props.seoPlace.coordinates,
+          });
+        }, 1000);
+      }
     }
 
     componentWillUnmount() {
@@ -83,7 +96,13 @@ const withCampsitesCluster = WrappedComponent =>
     onMarkClick = selectedPlace => {
       this.setState({
         selectedPlaceId: selectedPlace.id,
-        currentCenter: selectedPlace.entity.coordinates
+        currentCenter: selectedPlace.entity.coordinates,
+      });
+    };
+
+    onChangeCurrentCenter = coordinates => {
+      this.setState({
+        currentCenter: coordinates,
       });
     };
 
@@ -116,6 +135,7 @@ const withCampsitesCluster = WrappedComponent =>
           selectedPlace={this.getSelectedPlace(selectedPlaceId)}
           currentCenter={this.state.currentCenter}
           firebaseRef={this.firebaseRef}
+          onChangeCurrentCenter={this.onChangeCurrentCenter}
           {...this.props}
         />
       );
