@@ -73,7 +73,10 @@ const withCampsitesCluster = WrappedComponent =>
       if (this.props.seoPlace) {
         setTimeout(() => {
           this.setState({
-            currentCenter: this.props.seoPlace.coordinates,
+            currentCenter: [
+              this.props.seoPlace.latlng[1],
+              this.props.seoPlace.latlng[0],
+            ],
           });
         }, 1000);
       }
