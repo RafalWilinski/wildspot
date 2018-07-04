@@ -11,7 +11,11 @@ const Container = styled.div`
 
 export default () => (
   <Container>
-    <h1>⛺️ Wildspot</h1>
+    <h1>
+      <span role="img" aria-label="icon">
+        ⛺️{" "}
+      </span>Wildspot
+    </h1>
     <h4>Find your next sweet spot for setting up a tent</h4>
     <p>
       This project is brought to you by{" "}

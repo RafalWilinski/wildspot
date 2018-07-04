@@ -16,7 +16,11 @@ const Country = styled.p`
 
 export default ({ countries }) => (
   <Container>
-    <h1>⛺️ Wildspot Countries List</h1>
+    <h1>
+      <span role="img" aria-label="icon">
+        ⛺️{" "}
+      </span>Wildspot
+    </h1>
     {countries.map(country => (
       <Country>
         <a href={`/${normalizeNameToURI(country.name)}`}>
