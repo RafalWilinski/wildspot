@@ -68,8 +68,6 @@ const withCampsitesCluster = WrappedComponent =>
         }
       });
 
-      console.log(this.props.seoPlace);
-
       if (this.props.seoPlace) {
         setTimeout(() => {
           this.setState({
