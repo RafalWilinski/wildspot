@@ -26,18 +26,18 @@ import withVoting from "../../enhancers/withVoting";
 const styles = theme => ({
   formControl: {
     margin: theme.spacing.unit,
-    minWidth: 120
+    minWidth: 120,
   },
   textField: {
     marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit
+    marginRight: theme.spacing.unit,
   },
   button: {
-    margin: theme.spacing.unit
+    margin: theme.spacing.unit,
   },
   rightIcon: {
-    marginLeft: theme.spacing.unit
-  }
+    marginLeft: theme.spacing.unit,
+  },
 });
 
 const Groundwork = styled.div`
@@ -72,8 +72,18 @@ function Transition(props) {
 
 class PlaceDetailsModal extends Component {
   state = {
-    image: null
+    image: null,
   };
+
+  componentWillMount() {
+    this.props.firebaseRef
+      .child(this.props.selectedPlace.id)
+      .on("value", snap => {
+        this.setState({
+          selectedPlace: snap.val(),
+        });
+      });
+  }
 
   onZoomImage = image => {
     this.setState({ image });
@@ -81,7 +91,7 @@ class PlaceDetailsModal extends Component {
 
   onZoomClose = () => {
     this.setState({
-      image: null
+      image: null,
     });
   };
 
@@ -90,10 +100,11 @@ class PlaceDetailsModal extends Component {
       isOpen,
       classes,
       fullScreen,
-      selectedPlace,
       onClose,
-      onChangeNotificationText
+      onChangeNotificationText,
     } = this.props;
+
+    const { selectedPlace } = this.state;
 
     return (
       <Dialog
@@ -232,5 +243,5 @@ class PlaceDetailsModal extends Component {
 }
 
 export default withMobileDialog()(
-  withStyles(styles)(withVoting(PlaceDetailsModal))
+  withStyles(styles)(withVoting(PlaceDetailsModal)),
 );

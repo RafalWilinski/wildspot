@@ -6,11 +6,18 @@ const withVoting = WrappedComponent => {
       super(props);
 
       this.uid = localStorage.getItem("uid");
+      this.state = {
+        selectedPlace: {},
+      };
     }
 
     componentDidMount() {
       if (this.props.selectedPlace) {
         this.place = this.props.firebaseRef.child(this.props.selectedPlace.id);
+
+        this.place.on("value", snap => {
+          this.setState({ selectedPlace: snap.val() });
+        });
       }
     }
 
@@ -51,9 +58,9 @@ const withVoting = WrappedComponent => {
     };
 
     isVoted = () =>
-      this.props.selectedPlace &&
-      this.props.selectedPlace.votes &&
-      this.props.selectedPlace.votes[this.uid];
+      this.state.selectedPlace &&
+      this.state.selectedPlace.votes &&
+      this.state.selectedPlace.votes[this.uid];
 
     render() {
       return (
