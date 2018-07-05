@@ -137,6 +137,9 @@ const withCampsitesCluster = WrappedComponent =>
           currentCenter={this.state.currentCenter}
           firebaseRef={this.firebaseRef}
           onChangeCurrentCenter={this.onChangeCurrentCenter}
+          onChangeSelectedPlaceId={selectedPlaceId => {
+            this.setState({ selectedPlaceId });
+          }}
           {...this.props}
         />
       );

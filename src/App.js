@@ -11,7 +11,6 @@ import Map from "./mapbox";
 import AddPlaceForm from "./components/AddPlaceForm/container";
 import AddPlaceMenu from "./components/AddPlaceMenu";
 import Cover from "./components/Cover";
-import PlaceDetailsPopup from "./components/PlaceDetailsPopup";
 import PlaceDetailsModal from "./components/PlaceDetailsModal";
 import Tutorial from "./components/Tutorial";
 import BottomMenu from "./components/BottomMenu";
@@ -32,7 +31,6 @@ class App extends React.Component {
 
     this.state = {
       isMapLoading: true,
-      isPlaceDetailsModalOpen: false,
       isAdding: false,
       isShowingAddCover: false,
       isShowingAddForm: false,
@@ -114,27 +112,6 @@ class App extends React.Component {
   renderDataLoadingSpinner = () =>
     this.state.isMapLoading && <Cover>{this.state.loadingText}</Cover>;
 
-  renderPlaceDetails = () => {
-    const { selectedPlace, currentCenter } = this.props;
-
-    return (
-      selectedPlace &&
-      selectedPlace.entity &&
-      selectedPlace.entity.name &&
-      Math.abs(currentCenter[0] - selectedPlace.entity.coordinates[0]) <
-        0.000001 && (
-        <PlaceDetailsPopup
-          selectedPlace={selectedPlace}
-          onPlaceDetailsModalOpen={() =>
-            this.setState({
-              isPlaceDetailsModalOpen: true,
-            })
-          }
-        />
-      )
-    );
-  };
-
   renderCover = () =>
     this.state.isShowingAddCover && (
       <Cover onClick={this.onCloseCover}>
@@ -161,7 +138,6 @@ class App extends React.Component {
       isAdding,
       isShowingAddForm,
       isMapLoading,
-      isPlaceDetailsModalOpen,
       notificationText,
     } = this.state;
     const {
@@ -184,7 +160,6 @@ class App extends React.Component {
         >
           {myPositionMarker()}
           {campsitesCluster}
-          {this.renderPlaceDetails()}
           {this.renderAddFeature()}
         </Map>
         <PlacesSearch onLocationChanged={this.props.onChangeCurrentCenter} />
@@ -197,11 +172,16 @@ class App extends React.Component {
         {selectedPlace && (
           <PlaceDetailsModal
             onChangeNotificationText={this.onChangeNotificationText}
-            isOpen={isPlaceDetailsModalOpen}
+            isOpen={
+              !!(
+                selectedPlace &&
+                selectedPlace.entity &&
+                selectedPlace.entity.name
+              )
+            }
             selectedPlace={selectedPlace}
             onClose={e => {
-              this.setState({ isPlaceDetailsModalOpen: false });
-
+              this.props.onChangeSelectedPlaceId(-1);
               e.preventDefault();
               e.stopPropagation();
             }}
