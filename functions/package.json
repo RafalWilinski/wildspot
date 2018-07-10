@@ -1,0 +1,24 @@
+{
+  "name": "wildspot-functions",
+  "description": "Cloud Functions for Wildspot.co",
+  "scripts": {
+    "lint": "eslint .",
+    "serve": "firebase serve --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "dependencies": {
+    "@google-cloud/storage": "^1.7.0",
+    "child-process-promise": "^2.2.1",
+    "firebase-admin": "~5.12.1",
+    "firebase-functions": "^1.0.3",
+    "node-fetch": "^2.1.2"
+  },
+  "devDependencies": {
+    "eslint": "^4.12.0",
+    "eslint-plugin-promise": "^3.6.0"
+  },
+  "private": true
+}
