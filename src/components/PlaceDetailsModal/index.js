@@ -4,8 +4,10 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { Helmet } from "react-helmet";
+import ProgressiveImage from "react-progressive-image";
 
 import { withStyles } from "@material-ui/core/styles";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import GridListTile from "@material-ui/core/GridListTile";
@@ -64,6 +66,17 @@ const Emoji = styled.span`
 const Image = styled.img`
   width: 100%;
   cursor: zoom-in;
+`;
+
+const PlaceholderLoader = styled.div`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 function Transition(props) {
@@ -193,7 +206,7 @@ class PlaceDetailsModal extends Component {
             {(selectedPlace.entity.images || []).filter(Boolean).map(img => (
               <GridListTile key={img} cols={1}>
                 <Image
-                  src={img.replace("/o/images%2", "/o/images%2thumb_")}
+                  src={img.replace("/o/images%2F", "/o/images%2Fthumb_")}
                   alt={selectedPlace.entity.name}
                   onClick={() => this.onZoomImage(img)}
                 />
@@ -228,16 +241,32 @@ class PlaceDetailsModal extends Component {
         </DialogActions>
         <Dialog
           onClose={this.onZoomClose}
-          fullScreen
           open={this.state.image}
           TransitionComponent={Transition}
         >
-          <img
-            alt="place"
-            style={{ width: "100%" }}
-            onClick={this.onZoomClose}
+          <ProgressiveImage
             src={this.state.image}
-          />
+            placeholder={
+              this.state.image
+                ? this.state.image.replace("/o/images%2F", "/o/images%2Fthumb_")
+                : ""
+            }
+          >
+            {(src, loading) => (
+              <div>
+                <img
+                  style={{ opacity: loading ? 0.5 : 1, width: "100%" }}
+                  src={src}
+                  alt={selectedPlace.entity.name}
+                />
+                {loading && (
+                  <PlaceholderLoader>
+                    <CircularProgress style={{ color: "#ffffff" }} />
+                  </PlaceholderLoader>
+                )}
+              </div>
+            )}
+          </ProgressiveImage>
         </Dialog>
       </Dialog>
     );
