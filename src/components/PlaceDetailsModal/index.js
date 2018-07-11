@@ -106,6 +106,8 @@ class PlaceDetailsModal extends Component {
 
     const { selectedPlace } = this.state;
 
+    console.log(selectedPlace.entity.images);
+
     return (
       <Dialog
         open={isOpen}
@@ -191,7 +193,7 @@ class PlaceDetailsModal extends Component {
             {(selectedPlace.entity.images || []).filter(Boolean).map(img => (
               <GridListTile key={img} cols={1}>
                 <Image
-                  src={img}
+                  src={img.replace("/o/images%2", "/o/images%2thumb_")}
                   alt={selectedPlace.entity.name}
                   onClick={() => this.onZoomImage(img)}
                 />

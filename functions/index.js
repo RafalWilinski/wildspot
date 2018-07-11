@@ -34,6 +34,12 @@ exports.generateThumbnail = functions.storage.object().onFinalize(object => {
   const fileBucket = object.bucket;
   const filePath = object.name;
   const contentType = object.contentType;
+  const fileName = path.basename(filePath);
+
+  if (fileName.startsWith("thumb_")) {
+    console.log("Already a Thumbnail.");
+    return null;
+  }
 
   const bucket = gcs.bucket(fileBucket);
   const tempFilePath = path.join(os.tmpdir(), fileName);
