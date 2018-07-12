@@ -15,8 +15,8 @@ const sendMail = data => {
     to: "raf.wilinski@gmail.com",
     from: "test@example.com",
     subject: "New Wildspot! ⛺️",
-    text: data,
-    html: `<p>${data}</p>`,
+    text: JSON.stringify(data),
+    html: `<p>${JSON.stringify(data)}</p>`,
   };
   sgMail.send(msg);
 };
