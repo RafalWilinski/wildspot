@@ -6,6 +6,7 @@ const os = require("os");
 const fs = require("fs");
 const fetch = require("node-fetch");
 const sgMail = require("@sendgrid/mail");
+const cors = require("cors")({ origin: true });
 
 sgMail.setApiKey(functions.config().sendgrid.apikey);
 
@@ -91,16 +92,18 @@ exports.generateThumbnail = functions.storage.object().onFinalize(object => {
 });
 
 exports.getWeather = functions.https.onRequest((req, res) => {
-  const url = `https://api.openweathermap.org/data/2.5/weather?lat=${
-    req.query.lat
-  }&lon=${req.query.lon}&APPID=${functions.config().openweathermap.apikey}`;
+  return cors(req, res, () => {
+    const url = `https://api.openweathermap.org/data/2.5/weather?lat=${
+      req.query.lat
+    }&lon=${req.query.lon}&APPID=${functions.config().openweathermap.apikey}`;
 
-  fetch(url)
-    .then(res => res.json())
-    .then(data => {
-      return res.send(data);
-    })
-    .catch(error => {
-      return res.status(400).send(error);
-    });
+    fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        return res.send(data);
+      })
+      .catch(error => {
+        return res.status(400).send(error);
+      });
+  });
 });

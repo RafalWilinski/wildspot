@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { Helmet } from "react-helmet";
 import ProgressiveImage from "react-progressive-image";
+import { flag } from "country-code-emoji";
 
 import { withStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -19,6 +20,7 @@ import LocationOn from "@material-ui/icons/LocationOn";
 import ThumbUp from "@material-ui/icons/ThumbUp";
 import CloseIcon from "@material-ui/icons/Close";
 import Link from "@material-ui/icons/Link";
+import Cloud from "@material-ui/icons/Cloud";
 import { IconButton } from "@material-ui/core";
 import Slide from "@material-ui/core/Slide";
 import withMobileDialog from "@material-ui/core/withMobileDialog";
@@ -46,6 +48,7 @@ const Groundwork = styled.div`
   font-size: 12px;
   color: #666;
   margin-bottom: 10px;
+  margin-top: 5px;
 `;
 
 const ThumbsUpCount = styled.div`
@@ -86,15 +89,32 @@ function Transition(props) {
 class PlaceDetailsModal extends Component {
   state = {
     image: null,
+    isWeatherLoading: true,
   };
 
   componentWillMount() {
     this.props.firebaseRef
       .child(this.props.selectedPlace.id)
       .on("value", snap => {
-        this.setState({
-          selectedPlace: snap.val(),
-        });
+        this.setState(
+          {
+            selectedPlace: snap.val(),
+          },
+          state => {
+            fetch(
+              `https://us-central1-wildspots-d2aad.cloudfunctions.net/getWeather?lat=${
+                this.state.selectedPlace.entity.coordinates[1]
+              }&lon=${this.state.selectedPlace.entity.coordinates[0]}`,
+            )
+              .then(res => res.json())
+              .then(weather => {
+                this.setState({
+                  weather,
+                  isWeatherLoading: false,
+                });
+              });
+          },
+        );
       });
   }
 
@@ -105,7 +125,47 @@ class PlaceDetailsModal extends Component {
   onZoomClose = () => {
     this.setState({
       image: null,
+      isWeatherLoading: true,
     });
+  };
+
+  getWeatherIcon = weather => {
+    switch (weather) {
+      case "light intensity shower rain":
+      case "shower rain":
+        return "🌧";
+      case "light rain":
+        return "🌦";
+      case "few clouds":
+        return "🌤";
+      case "clear sky":
+        return "☀️";
+      case "broken clouds":
+        return "☁";
+      case "scattered clouds":
+        return "🌥";
+      case "rain":
+        return "🌧";
+      case "thunderstorm":
+        return "⛈";
+      case "snow":
+        return "🌨";
+      case "mist":
+        return "🌫";
+      default:
+        return "🤷‍";
+    }
+  };
+
+  getWeather = () => {
+    const { isWeatherLoading, weather } = this.state;
+    if (isWeatherLoading) return <span>⏳</span>;
+
+    return `${this.getWeatherIcon(weather.weather[0].description)} (${(
+      weather.main.temp - 273.15
+    ).toFixed(1)}°C / ${(((weather.main.temp - 273.15) * 9) / 5 + 32).toFixed(
+      1,
+    )}°F)`;
   };
 
   render() {
@@ -118,8 +178,6 @@ class PlaceDetailsModal extends Component {
     } = this.props;
 
     const { selectedPlace } = this.state;
-
-    console.log(selectedPlace.entity.images);
 
     return (
       <Dialog
@@ -145,7 +203,8 @@ class PlaceDetailsModal extends Component {
           </IconButton>
         )}
         <StyledDialogTitle id="form-dialog-title">
-          {selectedPlace.entity.name}
+          {flag(selectedPlace.entity.countryCode)} {selectedPlace.entity.name}{" "}
+          {this.getWeather()}
         </StyledDialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -215,6 +274,17 @@ class PlaceDetailsModal extends Component {
           </GridList>
         </DialogContent>
         <DialogActions>
+          {!this.state.isWeatherLoading && (
+            <a
+              href={`https://openweathermap.org/city/${this.state.weather.id}`}
+              target="_blank"
+              style={{ textDecoration: "none" }}
+            >
+              <IconButton className={classes.button}>
+                <Cloud />
+              </IconButton>
+            </a>
+          )}
           <a
             href={`https://www.google.com/maps/search/?api=1&query=${
               selectedPlace.entity.coordinates[1]
