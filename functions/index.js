@@ -69,8 +69,6 @@ exports.generateThumbnail = functions.storage.object().onFinalize(object => {
       destination: tempFilePath,
     })
     .then(() => {
-      console.log("Image downloaded locally to", tempFilePath);
-
       return spawn("convert", [
         tempFilePath,
         "-thumbnail",
@@ -90,4 +88,19 @@ exports.generateThumbnail = functions.storage.object().onFinalize(object => {
       });
     })
     .then(() => fs.unlinkSync(tempFilePath));
+});
+
+exports.getWeather = functions.https.onRequest((req, res) => {
+  const url = `https://api.openweathermap.org/data/2.5/weather?lat=${
+    req.query.lat
+  }&lon=${req.query.lon}&APPID=${functions.config().openweathermap.apikey}`;
+
+  fetch(url)
+    .then(res => res.json())
+    .then(data => {
+      return res.send(data);
+    })
+    .catch(error => {
+      return res.status(400).send(error);
+    });
 });
