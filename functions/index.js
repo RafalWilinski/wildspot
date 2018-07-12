@@ -5,6 +5,20 @@ const path = require("path");
 const os = require("os");
 const fs = require("fs");
 const fetch = require("node-fetch");
+const sgMail = require("@sendgrid/mail");
+
+sgMail.setApiKey(functions.config().sendgrid.apikey);
+
+const sendMail = data => {
+  const msg = {
+    to: "raf.wilinski@gmail.com",
+    from: "test@example.com",
+    subject: "New Wildspot! ⛺️",
+    text: data,
+    html: `<p>${data}</p>`,
+  };
+  sgMail.send(msg);
+};
 
 exports.geoToCountry = functions.database
   .ref("/spots/{spotId}")
@@ -13,6 +27,8 @@ exports.geoToCountry = functions.database
     const url = `http://api.geonames.org/countryCodeJSON?lat=${
       original.entity.coordinates[1]
     }&lng=${original.entity.coordinates[0]}&username=wildspot`;
+
+    sendMail(original);
 
     return fetch(url)
       .then(res => res.json())
