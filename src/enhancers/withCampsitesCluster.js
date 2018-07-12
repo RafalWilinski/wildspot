@@ -99,6 +99,12 @@ const withCampsitesCluster = WrappedComponent =>
         selectedPlaceId: selectedPlace.id,
         currentCenter: selectedPlace.entity.coordinates,
       });
+
+      window.history.pushState(
+        { pageTitle: selectedPlace.entity.name },
+        "",
+        `/${selectedPlace.id}`,
+      );
     };
 
     onChangeCurrentCenter = coordinates => {
