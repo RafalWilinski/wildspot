@@ -67,7 +67,7 @@ const Emoji = styled.span`
 `;
 
 const Image = styled.img`
-  width: 100%;
+  height: 160px;
   cursor: zoom-in;
 `;
 
@@ -262,7 +262,7 @@ class PlaceDetailsModal extends Component {
           <GridList
             cellHeight={160}
             className={classes.gridList}
-            cols={3}
+            cols={4}
             style={{ marginTop: "10px" }}
           >
             {(selectedPlace.entity.images || []).filter(Boolean).map(img => (
