@@ -4,6 +4,8 @@
 
 Repo for [wildspot.co](https://wildspot.co) project.
 
+![Wildspot](/src/images/wildspot_1.gif?raw=true "Wildspot.co")
+
 ### Development
 
 Before running anything, copy `.env.TEMPLATE` to `.env` file and fill all the values. Then:
