@@ -231,6 +231,21 @@ class AddPlaceForm extends Component {
           <StyledFormControlLabel
             control={
               <Checkbox
+                id="features.trash"
+                onChange={handleChange}
+                icon={"🗑"}
+                checkedIcon={"🗑"}
+                classes={{
+                  root: classes.root,
+                  checked: classes.checked,
+                }}
+              />
+            }
+            label="Trash Nearby"
+          />
+          <StyledFormControlLabel
+            control={
+              <Checkbox
                 id="features.cellular"
                 onChange={handleChange}
                 icon={"📶"}

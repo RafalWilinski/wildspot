@@ -226,6 +226,9 @@ class PlaceDetailsModal extends Component {
           <Emoji disabled={!selectedPlace.entity.features.water}>
             🚰 Water Access
           </Emoji>
+          <Emoji disabled={!selectedPlace.entity.features.trash}>
+            🗑 Trash Nearby
+          </Emoji>
           <Emoji disabled={!selectedPlace.entity.features.cellular}>
             📶 Cellular Access
           </Emoji>
