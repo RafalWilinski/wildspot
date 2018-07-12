@@ -1,3 +1,5 @@
+/* eslint jsx-a11y/accessible-emoji: 0 */
+
 import React from "react";
 import styled from "styled-components";
 import Post from "./components/Post";
@@ -36,15 +38,22 @@ export default () => (
     <h2>Find your next sweet spot for setting up a tent</h2>
     <p>
       This project is brought to you by{" "}
-      <a href="https://rwilinski.me">Rafal Wilinski</a>. Wildspot is 100% open
-      source, you can check it's code 🤓{" "}
-      <a href="https://github.com/RafalWilinski/wildspot">here.</a>
+      <a href="https://rwilinski.me" rel="noopener noreferrer" target="_blank">
+        Rafal Wilinski
+      </a>. Wildspot is 100% open source, you can check it's code 🤓{" "}
+      <a
+        href="https://github.com/RafalWilinski/wildspot"
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        here.
+      </a>
     </p>
     <p>Got an idea how to improve Wildspot? Suggest it on Trello! 👇 </p>
     <Paragraph>
       <a
         href="https://trello.com/b/Q7onKpPF/wildspotco-features"
-        rel="opener noopener"
+        rel="noopener noreferrer"
         target="_blank"
       >
         <TrelloIcon src="https://getbadges.io/images/trello_trello-mark-blue.png" />
