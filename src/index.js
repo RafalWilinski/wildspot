@@ -24,7 +24,10 @@ if (window.location.pathname === "/about") {
     entry => `/${normalizeNameToURI(entry.name)}` === window.location.pathname,
   )[0];
 
-  ReactDOM.render(<App seoPlace={place} />, document.getElementById("root"));
+  ReactDOM.render(
+    <App seoPlace={place} search={window.location.search} />,
+    document.getElementById("root"),
+  );
 }
 
 registerServiceWorker();

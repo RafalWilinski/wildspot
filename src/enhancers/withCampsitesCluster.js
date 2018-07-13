@@ -1,6 +1,7 @@
 import React from "react";
 import { Cluster, Marker } from "react-mapbox-gl";
 import styled from "styled-components";
+import querystring from "query-string";
 
 import firebase from "../firebase";
 
@@ -29,10 +30,22 @@ const withCampsitesCluster = WrappedComponent =>
     state = {
       places: [],
       selectedPlaceId: -1,
-      currentCenter: (
-        localStorage.getItem("lastPos") || "15.629874169513641,43.7947716883578"
-      ).split(",") || [15.629874169513641, 43.7947716883578],
+      currentCenter: this.getCurrentCenter(),
     };
+
+    getCurrentCenter() {
+      const defaultCenter = "15.629874169513641,43.7947716883578";
+      const defaultCenterArr = defaultCenter.split(",");
+
+      if (this.props.search) {
+        const search = querystring.parse(this.props.search);
+        if (search.lat && search.lng) {
+          return [search.lat, search.lng];
+        }
+      }
+
+      return localStorage.getItem("lastPos").split(",") || defaultCenterArr;
+    }
 
     componentDidMount() {
       this.firebaseRef = firebase.database().ref("/spots");
