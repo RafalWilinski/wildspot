@@ -8,6 +8,7 @@ import ProgressiveImage from "react-progressive-image";
 import { flag } from "country-code-emoji";
 
 import { withStyles } from "@material-ui/core/styles";
+import Tooltip from "@material-ui/core/Tooltip";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -44,11 +45,11 @@ const styles = theme => ({
   },
 });
 
-const Groundwork = styled.div`
+const Details = styled.div`
   font-size: 12px;
   color: #666;
-  margin-bottom: 10px;
-  margin-top: 5px;
+  margin-bottom: 3px;
+  margin-top: 3px;
 `;
 
 const ThumbsUpCount = styled.div`
@@ -100,7 +101,7 @@ class PlaceDetailsModal extends Component {
           {
             selectedPlace: snap.val(),
           },
-          state => {
+          () => {
             fetch(
               `https://us-central1-wildspots-d2aad.cloudfunctions.net/getWeather?lat=${
                 this.state.selectedPlace.entity.coordinates[1]
@@ -211,9 +212,23 @@ class PlaceDetailsModal extends Component {
             {selectedPlace.entity.description}
           </DialogContentText>
           {selectedPlace.entity.groundwork && (
-            <Groundwork>
+            <Details>
               Groundwork: {selectedPlace.entity.groundwork}
-            </Groundwork>
+              {selectedPlace.createdAt
+                ? `, Added: ${new Date(
+                    selectedPlace.createdAt,
+                  ).toLocaleDateString()}`
+                : ""}
+            </Details>
+          )}
+
+          <Details>
+            GPS: {selectedPlace.entity.coordinates[0]},{" "}
+            {selectedPlace.entity.coordinates[1]}
+          </Details>
+
+          {!this.state.isWeatherLoading && (
+            <Details>Nearest City: {this.state.weather.name}</Details>
           )}
 
           <Emoji disabled={!selectedPlace.entity.features.wifi}>📡 WiFi</Emoji>
@@ -278,39 +293,49 @@ class PlaceDetailsModal extends Component {
         </DialogContent>
         <DialogActions>
           {!this.state.isWeatherLoading && (
+            <Tooltip id="tooltip-vote" title="Open weather forecast">
+              <a
+                href={`https://openweathermap.org/city/${
+                  this.state.weather.id
+                }`}
+                target="_blank"
+                style={{ textDecoration: "none" }}
+              >
+                <IconButton className={classes.button}>
+                  <Cloud />
+                </IconButton>
+              </a>
+            </Tooltip>
+          )}
+          <Tooltip id="tooltip-vote" title="Open in Google Maps">
             <a
-              href={`https://openweathermap.org/city/${this.state.weather.id}`}
+              href={`https://www.google.com/maps/search/?api=1&query=${
+                selectedPlace.entity.coordinates[1]
+              },${selectedPlace.entity.coordinates[0]}`}
               target="_blank"
               style={{ textDecoration: "none" }}
             >
               <IconButton className={classes.button}>
-                <Cloud />
+                <LocationOn />
               </IconButton>
             </a>
-          )}
-          <a
-            href={`https://www.google.com/maps/search/?api=1&query=${
-              selectedPlace.entity.coordinates[1]
-            },${selectedPlace.entity.coordinates[0]}`}
-            target="_blank"
-            style={{ textDecoration: "none" }}
-          >
-            <IconButton className={classes.button}>
-              <LocationOn />
+          </Tooltip>
+          <Tooltip id="tooltip-vote" title="Copy URL to clipboard">
+            <CopyToClipboard
+              text={window.location}
+              onCopy={() => onChangeNotificationText("Link copied!")}
+            >
+              <IconButton className={classes.button}>
+                <Link />
+              </IconButton>
+            </CopyToClipboard>
+          </Tooltip>
+          <Tooltip id="tooltip-vote" title="Vote for this place">
+            <IconButton onClick={this.props.onVote}>
+              <ThumbUp color={this.props.isVoted ? "primary" : "disabled"} />
+              <ThumbsUpCount>{selectedPlace.votesCount || 0}</ThumbsUpCount>
             </IconButton>
-          </a>
-          <CopyToClipboard
-            text={window.location}
-            onCopy={() => onChangeNotificationText("Link copied!")}
-          >
-            <IconButton className={classes.button}>
-              <Link />
-            </IconButton>
-          </CopyToClipboard>
-          <IconButton onClick={this.props.onVote}>
-            <ThumbUp color={this.props.isVoted ? "primary" : "disabled"} />
-            <ThumbsUpCount>{selectedPlace.votesCount || 0}</ThumbsUpCount>
-          </IconButton>
+          </Tooltip>
         </DialogActions>
         <Dialog
           onClose={this.onZoomClose}
