@@ -77,6 +77,8 @@ class AddPlaceForm extends Component {
   constructor(props) {
     super(props);
     this.storage = firebase.storage().ref();
+
+    window.history.pushState("⛺️ Wildspot", "", "/");
   }
 
   onAttachFiles = files => {
