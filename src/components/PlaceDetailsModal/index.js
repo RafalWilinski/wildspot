@@ -250,6 +250,9 @@ class PlaceDetailsModal extends Component {
           <Emoji disabled={!selectedPlace.entity.features.car}>
             🚗 Accessible by car
           </Emoji>
+          <Emoji disabled={!selectedPlace.entity.features.bike}>
+            🚴‍ Accessible by bike
+          </Emoji>
           <Emoji disabled={!selectedPlace.entity.features.food}>
             🍽 Food nearby
           </Emoji>
