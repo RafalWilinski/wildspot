@@ -3,5 +3,6 @@ export default (id, entity) => ({
   votes: {},
   votesCount: 0,
   isPublic: false,
-  entity
+  entity,
+  createdAt: new Date(),
 });
