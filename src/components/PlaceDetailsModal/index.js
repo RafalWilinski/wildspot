@@ -208,7 +208,7 @@ class PlaceDetailsModal extends Component {
           {this.getWeather()}
         </StyledDialogTitle>
         <DialogContent>
-          <DialogContentText>
+          <DialogContentText style={{ whiteSpace: "pre-line" }}>
             {selectedPlace.entity.description}
           </DialogContentText>
           {selectedPlace.entity.groundwork && (

@@ -17,7 +17,7 @@
             ".validate": "newData.isString() && newData.val().length < 60"
           },
           "description": {
-            ".validate": "newData.isString() && newData.val().length < 500"
+            ".validate": "newData.isString() && newData.val().length < 5000"
           },
           "groundwork": {
             ".validate": "newData.isString() && newData.val().length < 12"

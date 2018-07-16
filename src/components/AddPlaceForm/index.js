@@ -57,6 +57,14 @@ const styles = theme => ({
     },
   },
   checked: {},
+  buttonProgress: {
+    color: "#aaa",
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    marginTop: -12,
+    marginLeft: -12,
+  },
 });
 
 const StyledIconButton = styled(IconButton)`
@@ -121,6 +129,7 @@ class AddPlaceForm extends Component {
       classes,
       fullScreen,
       errors,
+      error,
     } = this.props;
 
     return (
@@ -467,6 +476,7 @@ class AddPlaceForm extends Component {
             margin="normal"
             fullWidth
           />
+          {error && <Error>{JSON.stringify(error)}</Error>}
         </DialogContent>
         <DialogActions>
           <Button onClick={onCloseForm} color="primary">
@@ -478,6 +488,9 @@ class AddPlaceForm extends Component {
             disabled={isSubmitting}
           >
             Add Place
+            {isSubmitting && (
+              <CircularProgress size={24} className={classes.buttonProgress} />
+            )}
           </Button>
         </DialogActions>
       </Dialog>

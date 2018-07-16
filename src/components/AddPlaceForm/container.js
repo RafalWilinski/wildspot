@@ -17,7 +17,9 @@ const AddPlaceForm = withFormik({
   validationSchema: Yup.object().shape({
     name: Yup.string()
       .required("Required 👮‍")
-      .min(3, "At least 3 characters 😠"),
+      .min(3, "At least 3 characters 😠")
+      .max(59, "Max 60 chars!"),
+    description: Yup.string().max(4999, "Max 5000 chars!"),
     groundwork: Yup.string().required("Required 👮‍"),
   }),
   handleSubmit: (values, { props, setSubmitting, setError }) => {
@@ -31,8 +33,8 @@ const AddPlaceForm = withFormik({
 
     const newSpot = spotFactory(newSpotKey, {
       coordinates: props.coordinates,
-      lat: props.coordinates[0],
-      lng: props.coordinates[1],
+      lat: parseFloat(props.coordinates[0]),
+      lng: parseFloat(props.coordinates[1]),
       ...values,
     });
 
@@ -50,6 +52,7 @@ const AddPlaceForm = withFormik({
       })
       .catch(error => {
         setError(error);
+        console.log(error);
         setSubmitting(false);
       });
   },
