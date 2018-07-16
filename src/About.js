@@ -14,13 +14,17 @@ const Container = styled.div`
   margin: 20px;
 `;
 
-const Paragraph = styled.p`
+const Paragraph = styled.a`
+  display: flex;
+  flex-direction: row;
+  textdecoration: none;
   margin: 0;
 `;
 
-const TrelloIcon = styled.img`
-  width: 48px;
-  height: 48px;
+const Icon = styled.img`
+  width: 24px;
+  height: 24px;
+  margin-right: 5px;
 `;
 
 const PostImg = styled.img`
@@ -41,7 +45,7 @@ export default () => (
       This project is brought to you by{" "}
       <a href="https://rwilinski.me" rel="noopener noreferrer" target="_blank">
         Rafal Wilinski
-      </a>. Wildspot is 100% open source, you can check it's code 🤓{" "}
+      </a>. Wildspot is 100% open source, you can check it's code 🤓
       <a
         href="https://github.com/RafalWilinski/wildspot"
         rel="noopener noreferrer"
@@ -50,16 +54,36 @@ export default () => (
         here.
       </a>
     </p>
-    <p>Got an idea how to improve Wildspot? Suggest it on Trello! 👇 </p>
-    <Paragraph>
-      <a
+    <p>
+      <Paragraph
         href="https://trello.com/b/Q7onKpPF/wildspotco-features"
         rel="noopener noreferrer"
         target="_blank"
       >
-        <TrelloIcon src="https://getbadges.io/images/trello_trello-mark-blue.png" />
-      </a>
-    </Paragraph>
+        <Icon src="https://getbadges.io/images/trello_trello-mark-blue.png" />{" "}
+        Got an idea how to improve Wildspot? Suggest it on Trello!
+      </Paragraph>
+    </p>
+    <p>
+      <Paragraph
+        href="https://github.com/RafalWilinski/wildspot"
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        <Icon src="https://assets-cdn.github.com/images/modules/logos_page/GitHub-Mark.png" />{" "}
+        Caught a bug? If you could report it on Github, that would be great
+      </Paragraph>
+    </p>
+    <p>
+      <Paragraph
+        href="https://spectrum.chat/wildspot-co"
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        <Icon src="https://pbs.twimg.com/profile_images/849808190883545088/7i_PsjME_400x400.jpg" />{" "}
+        Wanna chat about Wildspot or adventures? Check out our community
+      </Paragraph>
+    </p>
     <Post title="Release 1.1 - Weather 🌦" date="12th July, 2018">
       <ul>
         <li>Added country flags 🇬🇧</li>
