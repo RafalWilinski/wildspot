@@ -13,10 +13,10 @@ sgMail.setApiKey(functions.config().sendgrid.apikey);
 const sendMail = data => {
   const msg = {
     to: "raf.wilinski@gmail.com",
-    from: "test@example.com",
+    from: "newplace@wildspot.io",
     subject: "New Wildspot! ⛺️",
     text: JSON.stringify(data),
-    html: `<p>${JSON.stringify(data)}</p>`,
+    html: `<h1>New Place!</h1><p>${JSON.stringify(data)}</p>`,
   };
   sgMail.send(msg);
 };
