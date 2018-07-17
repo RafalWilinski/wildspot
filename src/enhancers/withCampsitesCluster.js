@@ -1,7 +1,7 @@
 import React from "react";
 import { Cluster, Marker } from "react-mapbox-gl";
 import styled from "styled-components";
-import querystring from "query-string";
+import qs from "qs";
 
 import firebase from "../firebase";
 
@@ -38,7 +38,7 @@ const withCampsitesCluster = WrappedComponent =>
       const defaultCenterArr = defaultCenter.split(",");
 
       if (this.props.search) {
-        const search = querystring.parse(this.props.search);
+        const search = qs.parse(this.props.search);
         if (search.lat && search.lng) {
           return [search.lat, search.lng];
         }
