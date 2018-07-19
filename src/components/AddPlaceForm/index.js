@@ -469,7 +469,7 @@ class AddPlaceForm extends Component {
             id="description"
             label="Extra Info/Remarks"
             multiline
-            rows="3"
+            rows="5"
             defaultValue=""
             onChange={handleChange}
             className={classes.textField}
